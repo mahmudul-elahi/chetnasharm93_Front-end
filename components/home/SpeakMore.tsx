@@ -18,39 +18,54 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import MyButton from "@/components/ui/MyButton";
-import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
+
+function CircularMeter({
+  percentage,
+  color,
+  bgColor = "#E5E7EB",
+  animate = false,
+}: {
+  percentage: number;
+  color: string;
+  bgColor?: string;
+  animate?: boolean;
+}) {
+  const radius = 62;
+  const strokeWidth = 14;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = animate
+    ? circumference - (percentage / 100) * circumference
+    : circumference;
+
+  return (
+    <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
+      <circle
+        cx="80"
+        cy="80"
+        r={radius}
+        fill="transparent"
+        stroke={bgColor}
+        strokeWidth={strokeWidth}
+      />
+      <circle
+        cx="80"
+        cy="80"
+        r={radius}
+        fill="transparent"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeDasharray={circumference}
+        strokeDashoffset={strokeDashoffset}
+        strokeLinecap="round"
+        className="transition-all duration-1000 ease-out"
+      />
+    </svg>
+  );
+}
 
 export default function SpeakMore() {
   const [showChart, setShowChart] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Data for Traditional Class (20%)
-  const traditionalData = [
-    {
-      name: "Speaking Time",
-      value: 20,
-      fill: "#EF4444",
-    },
-    {
-      name: "Remaining",
-      value: 100,
-      fill: "#E5E7EB",
-    },
-  ];
-
-  // Data for ListenAct Class (80%)
-  const listenactData = [
-    {
-      name: "Speaking Time",
-      value: 80,
-      fill: "#10B981",
-    },
-    {
-      name: "Remaining",
-      value: 100,
-      fill: "#E5E7EB",
-    },
-  ];
 
   // Speaking tips for the placeholder
   const speakingTips = [
@@ -116,12 +131,12 @@ export default function SpeakMore() {
   return (
     <section
       ref={sectionRef}
-      className="py-16 md:py-24 bg-linear-to-bl from-white via-gray-50 to-secondary/5 relative overflow-hidden"
+      className="py-14 sm:py-16 md:py-24 bg-linear-to-bl from-white via-gray-50 to-secondary/5 relative overflow-hidden"
     >
 
-      <div className="max-w-350 px-4 sm:px-6 lg:px-8 mx-auto relative">
+      <div className="max-w-350 px-5 sm:px-6 lg:px-8 mx-auto relative">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 md:mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-linear-to-r from-primary/10 to-secondary/10 text-primary text-xs md:text-sm font-medium mb-4 md:mb-6 border border-primary/20">
             <Radio className="w-3 h-3 md:w-4 md:h-4 animate-pulse" />
             <span>85% of students speak more in their first class</span>
@@ -155,7 +170,7 @@ export default function SpeakMore() {
           </h2>
 
           <p className="text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto">
-            You're not sitting quietly — you're actively speaking in every class
+            You're not sitting quietly - you're actively speaking in every class
           </p>
         </div>
 
@@ -173,27 +188,11 @@ export default function SpeakMore() {
                 {/* Traditional Class Chart */}
                 <div className="text-center">
                   <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadialBarChart
-                        cx="50%"
-                        cy="50%"
-                        innerRadius="60%"
-                        outerRadius="80%"
-                        barSize={20}
-                        data={traditionalData}
-                        startAngle={90}
-                        endAngle={-270}
-                      >
-                        <RadialBar
-                          background={false}
-                          dataKey="value"
-                          cornerRadius={10}
-                          animationBegin={showChart ? 0 : 999999}
-                          animationDuration={1500}
-                          animationEasing="ease-out"
-                        />
-                      </RadialBarChart>
-                    </ResponsiveContainer>
+                    <CircularMeter
+                      percentage={20}
+                      color="#EF4444"
+                      animate={showChart}
+                    />
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <VolumeX className="w-5 h-5 md:w-6 md:h-6 text-red-400 mb-1" />
                       <p className="text-2xl md:text-3xl font-bold text-red-500">
@@ -215,27 +214,11 @@ export default function SpeakMore() {
                 {/* ListenAct Class Chart */}
                 <div className="text-center">
                   <div className="relative w-40 h-40 md:w-48 md:h-48 mx-auto">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RadialBarChart
-                        cx="50%"
-                        cy="50%"
-                        innerRadius="60%"
-                        outerRadius="80%"
-                        barSize={20}
-                        data={listenactData}
-                        startAngle={90}
-                        endAngle={-270}
-                      >
-                        <RadialBar
-                          background={false}
-                          dataKey="value"
-                          cornerRadius={10}
-                          animationBegin={showChart ? 0 : 999999}
-                          animationDuration={1500}
-                          animationEasing="ease-out"
-                        />
-                      </RadialBarChart>
-                    </ResponsiveContainer>
+                    <CircularMeter
+                      percentage={80}
+                      color="#10B981"
+                      animate={showChart}
+                    />
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <Mic className="w-5 h-5 md:w-6 md:h-6 text-green-500 mb-1" />
                       <p className="text-2xl md:text-3xl font-bold text-green-600">
@@ -336,7 +319,7 @@ export default function SpeakMore() {
               {
                 icon: MessageCircle,
                 title: "Active Participation",
-                description: "No hiding in the back — everyone speaks equally",
+                description: "No hiding in the back - everyone speaks equally",
                 tag: "Guaranteed",
               },
               {
@@ -350,6 +333,12 @@ export default function SpeakMore() {
                 title: "Confidence Building",
                 description: "From nervous to natural speaker in weeks",
                 tag: "Proven",
+              },
+              {
+                icon: Target,
+                title: "Personalized Feedback",
+                description: "Custom guidance after every class to accelerate fluency",
+                tag: "Actionable",
               },
             ].map((feature) => (
               <div key={feature.title} className="group relative">

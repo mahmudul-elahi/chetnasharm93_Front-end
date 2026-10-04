@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ClassDetails } from "@/types/classes";
+import { toast } from "sonner";
 
 interface CourseHeroProps {
   classData: ClassDetails;
@@ -36,12 +37,17 @@ const CourseHero = ({ classData, onBrowseBatches }: CourseHeroProps) => {
           text: classData.short_description || classData.description,
           url: window.location.href,
         });
+        return;
       } catch (error) {
-        console.error("Error sharing:", error);
+        if ((error as Error).name === "AbortError") return;
       }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+    }
+
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    } catch {
+      toast.error("Failed to copy link to clipboard");
     }
   };
 

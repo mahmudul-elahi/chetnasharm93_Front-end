@@ -47,14 +47,6 @@ const getRequiredRoles = (pathname: string): Role[] | null => {
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
-  // RSC fetch requests — Next.js handles these internally
-  const isRSC =
-    request.headers.get("next-router-state-tree") !== null ||
-    request.headers.get("rsc") !== null ||
-    request.nextUrl.searchParams.has("_rsc");
-
-  if (isRSC) return NextResponse.next();
-
   // All dashboard routes require authentication
   if (pathname.startsWith("/dashboard")) {
     const token = request.cookies.get("authToken")?.value;

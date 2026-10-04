@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Calendar } from "lucide-react";
 import { convertUtcScheduleToLocal } from "@/src/utils/timezone";
 
@@ -17,12 +16,6 @@ interface WeeklyScheduleProps {
 }
 
 const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({ schedules }) => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   if (!schedules || schedules.length === 0) {
     return (
       <div className="flex items-center gap-2 text-sm text-gray-500 bg-primary/5 p-3 rounded-xl">

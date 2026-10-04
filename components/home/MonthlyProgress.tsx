@@ -22,37 +22,40 @@ export default function MonthlyProgress() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-linear-to-bl from-white via-gray-50 to-secondary/5">
-      <div className="max-w-350 px-4 sm:px-6 lg:px-8 mx-auto">
+    <section className="py-14 sm:py-16 md:py-24 bg-linear-to-bl from-white via-gray-50 to-secondary/5">
+      <div className="max-w-350 px-5 sm:px-6 lg:px-8 mx-auto">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-linear-to-r from-primary/10 to-secondary/10 text-primary text-xs md:text-sm font-medium mb-4 md:mb-6 border border-primary/20">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-linear-to-r from-primary/10 to-secondary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4 border border-primary/20">
             <FileText className="w-4 h-4" />
-            Monthly Progress Reports
+            <span>Monthly Progress Reports</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 ">
-            Know Exactly{" "}
-            <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent">Where You Stand</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
+            <span className="block sm:inline">Know Exactly </span>
+            <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent block sm:inline">
+              Where You Stand
+            </span>
           </h2>
-          <div className="flex flex-wrap justify-center gap-3 mt-4">
-            <span className="flex items-center gap-1 text-sm text-gray-600">
-              <AlertCircle className="w-4 h-4 text-red-500" />
-              Your mistakes
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-xl mx-auto mb-4 sm:mb-6">
+            Clear, data-driven feedback tracking your mistakes, improvements, and next focus areas.
+          </p>
+
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 sm:p-2 bg-gray-100/80 rounded-2xl sm:rounded-full border border-gray-200/80">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-full text-xs sm:text-sm font-medium text-red-600 shadow-xs">
+              <AlertCircle className="w-3.5 h-3.5 text-red-500" />
+              Your Mistakes
             </span>
-            <span className="text-gray-300">→</span>
-            <span className="flex items-center gap-1 text-sm text-gray-600">
-              <TrendingUp className="w-4 h-4 text-green-500" />
-              Your improvement
+            <span className="text-gray-400 text-xs hidden sm:inline">→</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-full text-xs sm:text-sm font-medium text-emerald-600 shadow-xs">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+              Your Improvement
             </span>
-            <span className="text-gray-300">→</span>
-            <span className="flex items-center gap-1 text-sm text-gray-600">
-              <Target className="w-4 h-4 text-purple-500" />
-              What to fix next
+            <span className="text-gray-400 text-xs hidden sm:inline">→</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-full text-xs sm:text-sm font-medium text-purple-600 shadow-xs">
+              <Target className="w-3.5 h-3.5 text-purple-500" />
+              What to Fix Next
             </span>
           </div>
-          <p className="text-gray-400 text-sm mt-3">
-            No confusion. No guessing.
-          </p>
         </div>
 
         {/* Demo Report Card */}
@@ -60,13 +63,13 @@ export default function MonthlyProgress() {
           <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
             {/* Report Header */}
             <div className="bg-linear-to-r from-primary to-secondary px-6 py-4">
-              <div className="flex justify-between items-center">
-                <div>
+              <div className="flex justify-between items-center gap-3">
+                <div className="min-w-0">
                   <p className="text-white/70 text-xs">Monthly Progress Report</p>
-                  <p className="text-white font-semibold text-sm md:text-base">Student Demo | March 2026</p>
+                  <p className="text-white font-semibold text-sm md:text-base truncate sm:overflow-visible">Student Demo | March 2026</p>
                 </div>
-                <div className="bg-white/20 rounded-full px-2 py-2 flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">Sample Report</span>
+                <div className="bg-white/20 rounded-full px-3 py-1 sm:py-1.5 flex items-center justify-center shrink-0">
+                  <span className="text-white text-xs font-medium whitespace-nowrap">Sample Report</span>
                 </div>
               </div>
             </div>

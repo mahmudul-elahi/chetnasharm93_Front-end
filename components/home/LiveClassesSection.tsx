@@ -24,33 +24,33 @@ const LiveClassesSection = () => {
   }
 
   return (
-    <section className="py-20 relative bg-white overflow-hidden">
+    <section className="py-14 sm:py-16 md:py-20 relative bg-white overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl" />
 
-      <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-350 mx-auto px-5 sm:px-6 lg:px-8 relative">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 bg-purple-500/10 rounded-full mb-3 sm:mb-4">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
             </span>
             <Video className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-medium text-purple-600">
+            <span className="text-xs sm:text-sm font-medium text-purple-600">
               Live Interactive Classes
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
             Join Live
             <span className="bg-linear-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
               {" "}
               Language Classes
             </span>
-          </h1>
+          </h2>
 
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Learn in real-time with expert instructors. Get instant feedback,
             practice speaking, and connect with fellow learners.
           </p>
@@ -76,7 +76,15 @@ const LiveClassesSection = () => {
             quantity={3}
           />
         ) : classes.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div
+            className={`grid grid-cols-1 gap-8 ${
+              classes.slice(0, 3).length === 1
+                ? "max-w-md mx-auto"
+                : classes.slice(0, 3).length === 2
+                ? "md:grid-cols-2 max-w-4xl mx-auto"
+                : "md:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
             {classes.slice(0, 3).map((classItem: ClassItem) => (
               <LiveClassCard key={classItem.id} classItem={classItem} />
             ))}

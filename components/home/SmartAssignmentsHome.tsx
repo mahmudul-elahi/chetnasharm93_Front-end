@@ -78,30 +78,29 @@ export default function SmartAssignmentsHome() {
   ];
 
   return (
-    <section className="py-16 md:py-24 min-h-screen bg-linear-to-br from-slate-50 via-white to-purple-50 ">
-      {/* Header */}
-
-      <div className="text-center  mx-auto mb-12">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full mb-4">
-          <ClipboardList className="w-4 h-4 text-purple-600" />
-          <span className="text-sm font-medium text-purple-600">
-            Smart Assignments
-          </span>
+    <section className="py-14 sm:py-16 md:py-20 bg-linear-to-br from-slate-50 via-white to-purple-50">
+      <div className="max-w-350 mx-auto px-5 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 bg-purple-500/10 rounded-full mb-3 sm:mb-4">
+            <ClipboardList className="w-4 h-4 text-purple-600" />
+            <span className="text-xs sm:text-sm font-medium text-purple-600">
+              Smart Assignments
+            </span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
+            Assignments That{" "}
+            <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent">
+              Actually Improve You
+            </span>
+          </h2>
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-xl mx-auto">
+            Not busy work - focused tasks that build real skills
+          </p>
         </div>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-          Assignments That{" "}
-          <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent">
-            Actually Improve You
-          </span>
-        </h2>
-        <p className="text-gray-600 text-lg">
-          Not busy work — focused tasks that build real skills
-        </p>
-      </div>
 
-      <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8 ">
         {/* Two Column Layout */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {assignments.map((item) => (
             <div
               key={item.title}
@@ -110,7 +109,7 @@ export default function SmartAssignmentsHome() {
               {/* Top Gradient Bar */}
               <div className={`h-1 bg-linear-to-r ${item.gradient}`} />
 
-              <div className="p-6">
+              <div className="p-5 sm:p-6">
                 {/* Header with Icon */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -161,27 +160,27 @@ export default function SmartAssignmentsHome() {
               </div>
             </div>
 
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               {sampleTasks.map((task, idx) => (
                 <React.Fragment key={task.title}>
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <div
-                      className={`w-10 h-10 rounded-full bg-${task.color}-100 flex items-center justify-center shrink-0`}
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-${task.color}-100 flex items-center justify-center shrink-0`}
                     >
                       <span
-                        className={`text-${task.color}-600 font-bold text-sm`}
+                        className={`text-${task.color}-600 font-bold text-xs sm:text-sm`}
                       >
                         {task.number}
                       </span>
                     </div>
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-1">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-gray-900 text-sm sm:text-base mb-1">
                         {task.title}
                       </p>
-                      <p className="text-gray-600 text-sm mb-2">
+                      <p className="text-gray-600 text-xs sm:text-sm mb-2">
                         {task.description}
                       </p>
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                      <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
                           <Timer className="w-3 h-3" />
                           {task.duration}

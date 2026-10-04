@@ -151,7 +151,7 @@ const ClassesManagement = () => {
       cellClassName: "px-4 py-3 text-left max-w-xs",
       render: (value) => (
         <p className="truncate max-w-50" title={value}>
-          {value || "—"}
+          {value || "-"}
         </p>
       ),
     },

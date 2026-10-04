@@ -76,7 +76,7 @@ const MyAssignedBatchesPage = () => {
       cellClassName: "px-4 py-3 whitespace-nowrap text-center font-medium",
       render: (_, row) => (
         <div className="flex items-center justify-center gap-2">
-          <span className="text-primary">{row.class?.title || "—"}</span>
+          <span className="text-primary">{row.class?.title || "-"}</span>
         </div>
       ),
     },
@@ -126,7 +126,7 @@ const MyAssignedBatchesPage = () => {
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${colorClass}`}
           >
-            {row.status || "—"}
+            {row.status || "-"}
           </span>
         );
       },
@@ -151,7 +151,7 @@ const MyAssignedBatchesPage = () => {
               ? "Active"
               : row.active_status === 0
                 ? "Deactivated"
-                : "—"}
+                : "-"}
           </span>
         );
       },

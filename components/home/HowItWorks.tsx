@@ -81,7 +81,7 @@ export default function HowItWorks() {
             </span>
           </h2>
           <p className="text-gray-600 dark:text-gray-300 text-lg animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-            Learn → Practice → Implement — A proven path to English fluency
+            Learn → Practice → Implement - A proven path to English fluency
           </p>
         </div>
 
@@ -199,7 +199,7 @@ export default function HowItWorks() {
                 </p>
               </div>
               <p className="text-emerald-700 mb-4">
-                Most courses only teach you concepts — they never make you
+                Most courses only teach you concepts - they never make you
                 practice or implement what you've learned.
               </p>
               <div className="inline-flex items-center gap-2 px-5 py-2 bg-linear-to-r from-emerald-500 to-green-500 rounded-full shadow-md hover:shadow-lg transition-all duration-300">

@@ -179,7 +179,7 @@ const PaymentsContent = () => {
             <UserRound className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{row.user?.name || "—"}</p>
+            <p className="font-medium text-gray-900">{row.user?.name || "-"}</p>
             <p className="text-xs text-gray-500">ID: {row.user_id}</p>
           </div>
         </div>

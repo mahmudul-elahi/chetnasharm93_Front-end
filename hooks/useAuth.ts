@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/src/redux/hooks";
 import { logout, setCredentials } from "@/src/redux/slices/authSlice";
@@ -12,7 +12,6 @@ import {
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [isInitializing, setIsInitializing] = useState(true);
 
   const {
     user: reduxUser,
@@ -98,14 +97,9 @@ export const useAuth = () => {
     }
   }, [isError, error, handleLogout]);
 
-  // Set initializing to false
-  useEffect(() => {
-    if (!shouldFetchUser) {
-      setIsInitializing(false);
-    } else if (extractedUser || isError) {
-      setIsInitializing(false);
-    }
-  }, [shouldFetchUser, extractedUser, isError]);
+  // Derived initialization state (avoid setState in effect)
+  const isInitializing =
+    shouldFetchUser && isFetchingUser && !reduxUser && !extractedUser && !isError;
 
   const login = useCallback(
     async (credentials: {

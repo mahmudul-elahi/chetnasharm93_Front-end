@@ -178,7 +178,7 @@ const StudentTransactionsPage = () => {
       headerClassName: "text-left",
       cellClassName: "px-4 py-3 text-left font-mono text-xs",
       render: (_, row) => (
-        <p className="font-mono text-gray-600">{row.transaction_id || "—"}</p>
+        <p className="font-mono text-gray-600">{row.transaction_id || "-"}</p>
       ),
     },
     {
@@ -195,7 +195,7 @@ const StudentTransactionsPage = () => {
         <div className="flex items-center justify-center gap-1">
           <Calendar className="w-3 h-3 text-gray-400" />
           <span className="text-sm">
-            {row.paid_at ? format(row.paid_at, "dd MMM yyyy") : "—"}
+            {row.paid_at ? format(row.paid_at, "dd MMM yyyy") : "-"}
           </span>
         </div>
       ),

@@ -13,25 +13,37 @@ import LoginButton from "../ui/LoginButton";
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { isLoading, isAuthenticated, logout } = useAuth();
   const { data: fetchedUser, isLoading: userLoading } = useGetMeQuery({
     skip: !isAuthenticated,
   });
-  const navItems = [
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const user = fetchedUser?.user;
+  const isLoggedIn = mounted && isAuthenticated && !!user;
+
+  const baseNavItems = [
+    { name: "Home", href: "/" },
     { name: "Classes", href: "/classes" },
     { name: "Tutors", href: "/tutors" },
     { name: "Assignments", href: "/assignments" },
     { name: "Free Resources", href: "/free-resources" },
-    { name: "Dashboard", href: "/dashboard" },
+    { name: "Contact Us", href: "/contact" },
   ];
+
+  const navItems = isLoggedIn
+    ? [...baseNavItems, { name: "Dashboard", href: "/dashboard" }]
+    : baseNavItems;
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === href;
     return pathname === href || pathname?.startsWith(`${href}/`);
   };
-
-  const user = fetchedUser?.user;
 
   // Don't render auth section on server, only on client after mount
   const renderAuthSection = () => {
@@ -52,7 +64,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="text-black fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/10 backdrop-blur-sm">
+      <nav className="text-gray-900 bg-white/95 backdrop-blur-md fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-gray-200/60 shadow-xs">
         <div className="max-w-350 px-4 sm:px-6 lg:px-8  mx-auto h-17 flex items-center justify-between gap-8">
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <img src="/logo.webp" alt="Logo" className="w-38" />
@@ -82,7 +94,7 @@ const Navbar = () => {
             {renderAuthSection()}
 
             <button
-              className="lg:hidden flex flex-col gap-1 p-1.5 rounded-lg border border-white/10 hover:bg-white/10 transition-all duration-200"
+              className="lg:hidden flex items-center justify-center p-2 rounded-lg border border-gray-200 text-gray-800 hover:bg-gray-100 transition-all duration-200"
               onClick={() => setSidebarOpen(true)}
               aria-label="Open menu"
             >
@@ -95,6 +107,7 @@ const Navbar = () => {
       <Sidebar
         user={user}
         userLoading={userLoading}
+        isAuthenticated={isAuthenticated}
         logout={logout}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

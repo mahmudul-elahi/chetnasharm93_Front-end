@@ -138,7 +138,7 @@ const SpeakingTopicManagementPage = () => {
             value,
           )}`}
         >
-          {value || "—"}
+          {value || "-"}
         </span>
       ),
     },

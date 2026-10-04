@@ -6,6 +6,7 @@ import { useGetSupportInfoQuery } from "@/src/redux/api/home/supportApi";
 import MyButton from "@/components/ui/MyButton";
 import { RiCustomerService2Fill } from "react-icons/ri";
 import Loader from "@/components/ui/Loader";
+import { toast } from "sonner";
 
 const ContactPage = () => {
   const { data, isLoading } = useGetSupportInfoQuery(null);
@@ -55,6 +56,7 @@ const ContactPage = () => {
     const email = supportInfo?.support_email || "support@listenact.com";
     navigator.clipboard.writeText(email);
     setCopiedEmail(true);
+    toast.success("Email copied to clipboard!");
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
@@ -62,6 +64,7 @@ const ContactPage = () => {
     const phone = supportInfo?.support_number || "+1 800 123 4567";
     navigator.clipboard.writeText(phone);
     setCopiedPhone(true);
+    toast.success("Phone number copied to clipboard!");
     setTimeout(() => setCopiedPhone(false), 2000);
   };
 
@@ -93,7 +96,7 @@ const ContactPage = () => {
           </h1>
 
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed px-4">
-            Have questions about our language courses? Reach out to our team —
+            Have questions about our language courses? Reach out to our team -
             we're here to help you find the perfect learning path.
           </p>
         </div>

@@ -9,10 +9,15 @@ const DEFAULT_MESSAGE =
   "Hi, I would like to speak with an advisor about your classes.";
 
 const TalkToAnAdvisorButton = () => {
-  const { data, isLoading, isError } = useGetSupportInfoQuery(null);
+  const { data, isLoading } = useGetSupportInfoQuery(null);
   const supportNumber = data?.data?.support_number;
 
   const handleWhatsApp = () => {
+    if (isLoading) {
+      toast.info("Connecting to advisor...");
+      return;
+    }
+
     if (!supportNumber) {
       toast.error("Support number not available. Please try again later.");
       return;
@@ -33,22 +38,9 @@ const TalkToAnAdvisorButton = () => {
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
-  if (isLoading) return null;
-
-  if (isError) {
-    return (
-      <MyButton className="h-11" onClick={() => toast.error("Support number not available")}>
-        <span className="flex  items-center justify-center gap-2 md:gap-3  font-semibold">
-          Talk to an Advisor
-          <RiCustomerService2Fill className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-100" />
-        </span>
-      </MyButton>
-    );
-  }
-
   return (
     <MyButton className="h-11" onClick={handleWhatsApp}>
-      <span className="flex  items-center justify-center gap-2 md:gap-3  font-semibold">
+      <span className="flex items-center justify-center gap-2 md:gap-3 font-semibold">
         Talk to an Advisor
         <RiCustomerService2Fill className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-100" />
       </span>

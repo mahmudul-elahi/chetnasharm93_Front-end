@@ -86,8 +86,8 @@ const CurriculumEditor = ({ value, onChange }: CurriculumEditorProps) => {
   ) => {
     if (fromIndex === toIndex) return;
 
-    const module = modules[moduleIndex];
-    const newKeypoints = [...module.keypoints];
+    const currentModule = modules[moduleIndex];
+    const newKeypoints = [...currentModule.keypoints];
     const [removed] = newKeypoints.splice(fromIndex, 1);
     newKeypoints.splice(toIndex, 0, removed);
 

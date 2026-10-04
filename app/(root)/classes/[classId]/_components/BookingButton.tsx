@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Zap } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
 
 const BookingButton = ({ classData }: { classData: any }) => {
   const [isBooking, setIsBooking] = React.useState(false);
@@ -10,13 +11,14 @@ const BookingButton = ({ classData }: { classData: any }) => {
   const handleBookNow = () => {
     if (isFree) {
       // Handle free booking
-
+      setIsBooking(true);
       setTimeout(() => {
-        alert("Successfully enrolled! Check your email for class details.");
+        setIsBooking(false);
+        toast.success("Successfully enrolled! Check your email for class details.");
       }, 1000);
     } else {
       // Redirect to payment page or open payment modal
-      alert("Redirecting to payment gateway...");
+      toast.info("Redirecting to payment gateway...");
     }
   };
   return (

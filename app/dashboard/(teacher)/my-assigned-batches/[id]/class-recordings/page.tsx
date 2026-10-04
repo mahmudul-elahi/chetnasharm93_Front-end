@@ -135,7 +135,7 @@ const ClassRecordingsPage = () => {
       cellClassName: "px-4 py-3 text-center",
       render: (_, row) => (
         <span className="font-medium text-primary">
-          {row.batch?.name || "—"}
+          {row.batch?.name || "-"}
         </span>
       ),
     },

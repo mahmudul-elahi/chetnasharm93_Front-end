@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import {
   ArrowRight,
   Star,
@@ -16,8 +17,8 @@ import TalkToAnAdvisorButton from "./components/TalkToAnAdvisorButton";
 
 const Banner = () => {
   return (
-    <section className="pt-5 relative min-h-screen w-full bg-linear-to-br from-slate-50 via-purple-50 to-indigo-100">
-      <div className="relative max-w-350 mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center py-12 sm:py-16 md:py-20">
+    <section className="pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-20 lg:pb-20 relative min-h-screen w-full bg-linear-to-br from-slate-50 via-purple-50 to-indigo-100 flex items-center">
+      <div className="relative max-w-350 mx-auto px-5 sm:px-6 lg:px-8 w-full pt-1 pb-4 sm:py-8 lg:py-12">
         <div className="grid lg:grid-cols-2 gap-0 lg:gap-16 items-center w-full">
           {/* Left Content */}
           <div className="space-y-5 md:space-y-6 lg:space-y-7">
@@ -47,7 +48,7 @@ const Banner = () => {
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-lg leading-relaxed">
               No confusion. No guessing.
               <br />
-              Understand English in your own language — and start speaking from
+              Understand English in your own language - and start speaking from
               Day 1.
             </p>
 
@@ -58,7 +59,7 @@ const Banner = () => {
               </div>
               <div className="inline-block px-4 py-2 md:px-6 md:py-3 bg-linear-to-r from-green-100 to-green-100 border-l-4 border-green-500 rounded-r-xl shadow-sm">
                 <p className="text-sm md:text-base lg:text-lg font-medium text-black italic">
-                  "Apni maa-boli naal English sikho — samajh ke, bol ke,
+                  "Apni maa-boli naal English sikho - samajh ke, bol ke,
                   confidently."
                 </p>
               </div>
@@ -68,9 +69,12 @@ const Banner = () => {
             <div className="relative lg:hidden mt-8">
               <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/20">
                 <div className="absolute inset-0 bg-linear-to-tr from-purple-600/20 via-transparent to-indigo-600/20 z-10" />
-                <img
+                <Image
                   src="/assets/hero.webp"
-                  alt="Punjabi student learning English in online live class with teacher"
+                  alt="Student learning English in online live class with teacher"
+                  width={600}
+                  height={450}
+                  priority
                   className="w-full h-auto object-cover"
                 />
 
@@ -175,9 +179,13 @@ const Banner = () => {
               <div className="relative hidden lg:block">
                 <div className=" relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/20">
                   <div className="absolute inset-0 bg-linear-to-tr from-purple-600/20 via-transparent to-indigo-600/20 z-10" />
-                  <img
+                  <Image
                     src="/assets/hero.webp"
-                    alt="Punjabi student learning English in online live class with teacher"
+                    alt="Student learning English in online live class with teacher"
+                    width={700}
+                    height={500}
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     className="w-full h-auto object-cover"
                   />
 
@@ -381,69 +389,6 @@ const Banner = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-
-        @keyframes float-delayed {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-6px);
-          }
-        }
-
-        @keyframes pulse-slow {
-          0%,
-          100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-          }
-          50% {
-            transform: scale(1.02);
-            box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
-          }
-        }
-
-        @keyframes ping {
-          75%,
-          100% {
-            transform: scale(2);
-            opacity: 0;
-          }
-        }
-
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-
-        .animate-float-delayed {
-          animation: float-delayed 3s ease-in-out infinite 1.5s;
-        }
-
-        .animate-pulse-slow {
-          animation: pulse-slow 2s ease-in-out infinite;
-        }
-
-        .animate-ping {
-          animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-
-        @media (min-width: 480px) {
-          .xs\:grid-cols-2 {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-        }
-      `}</style>
     </section>
   );
 };

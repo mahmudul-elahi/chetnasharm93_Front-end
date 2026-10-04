@@ -83,7 +83,7 @@ const Footer = () => {
       {/* Animated Gradient Border Top */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-br from-primary via-secondary to-primary animate-gradient-x" />
 
-      <div className="relative max-w-350 mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative max-w-350 mx-auto px-5 sm:px-6 lg:px-8 pt-8 pb-10 sm:py-12">
         {/* Main Footer Content - 4 Columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}

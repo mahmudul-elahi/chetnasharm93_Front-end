@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
               Forgot your password?
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-              No worries — enter your email and we&apos;ll send you a
+              No worries - enter your email and we&apos;ll send you a
               verification code.
             </p>
           </div>

@@ -180,12 +180,12 @@ const WaitingListPage = () => {
           </div>
           <div>
             <p className="font-semibold text-gray-900 dark:text-white">
-              {row.user?.name || "—"}
+              {row.user?.name || "-"}
             </p>
             <div className="flex items-center gap-1 mt-0.5">
               <Mail className="w-3 h-3 text-gray-400" />
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                {row.user?.email || "—"}
+                {row.user?.email || "-"}
               </p>
             </div>
           </div>
@@ -211,7 +211,7 @@ const WaitingListPage = () => {
           <div className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors">
             <BookOpen className="w-4 h-4 text-gray-400" />
             <span className="text-gray-700 dark:text-gray-300">
-              {row.batch?.name || "—"}
+              {row.batch?.name || "-"}
             </span>
           </div>
         </Link>

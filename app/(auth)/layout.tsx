@@ -1,8 +1,7 @@
 import React from "react";
-import { ChevronsLeft, Shield, Star, Users, Zap } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Toaster } from "sonner";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -12,26 +11,27 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="bg-linear-to-br from-slate-50 via-white to-blue-50 min-h-screen">
       <div className="max-w-6xl mx-auto flex flex-col min-h-screen">
-        {/* Logo and Back Button */}
-        <div className="w-full flex flex-col items-center gap-4 lg:flex-row lg:justify-between py-8 px-4">
-          <Link href="/" className="flex items-center gap-2 group w-38">
-            <img src="./logo.webp" alt="logo" className="w-full" />
+        {/* Top Navigation Bar: Logo on left, Back button on right */}
+        <header className="w-full flex items-center justify-between py-4 sm:py-6 px-4 sm:px-6">
+          <Link href="/" className="flex items-center shrink-0">
+            <img src="/logo.webp" alt="ListenAct Logo" className="w-32 sm:w-38" />
           </Link>
 
-          <Link
-            href="/"
-            className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-          >
-            <Button variant="outline">
-              <ChevronsLeft /> Back to Home
+          <Link href="/" className="shrink-0">
+            <Button
+              variant="outline"
+              className="h-9 px-3.5 sm:h-10 sm:px-5 rounded-full gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-gray-700 hover:text-gray-900 border-gray-200 hover:border-gray-300 bg-white/90 hover:bg-white shadow-2xs transition-all group cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-transform group-hover:-translate-x-0.5" />
+              <span className="hidden sm:inline">Back to </span>Home
             </Button>
           </Link>
-        </div>
+        </header>
 
-        <div className="flex-1 flex  items-center justify-center px-4 xl:px-0">
+        <div className="flex-1 flex items-center justify-center px-4 xl:px-0 py-2 sm:py-6">
           {children}
         </div>
-        <div className="h-20 xl:h-0 "></div>
+        <div className="h-10 sm:h-16 xl:h-0" />
       </div>
     </div>
   );

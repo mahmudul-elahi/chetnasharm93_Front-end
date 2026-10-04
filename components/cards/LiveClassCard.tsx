@@ -1,6 +1,7 @@
 // components/cards/LiveClassCard.tsx
 import React from "react";
-import { Clock, Calendar, Video, Eye, BookOpen, Award, Image } from "lucide-react";
+import NextImage from "next/image";
+import { Clock, Calendar, Video, Eye, BookOpen, Award, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import { LiveClassCardProps } from "@/types/classes";
 import { PriceDisplay } from "../ui/PriceDisplay";
@@ -11,14 +12,16 @@ const LiveClassCard = ({ classItem }: LiveClassCardProps) => {
       {/* Class Image Section */}
       <div className="relative h-52 overflow-hidden bg-linear-to-br from-purple-100 to-indigo-100">
         {classItem.image_url ? (
-          <img
+          <NextImage
             src={classItem.image_url}
             alt={classItem.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
           />
         ) : (
-          <div className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 flex justify-center items-center">
-            <Image className="size-12 text-primary/50"/>
+          <div className="w-full h-full flex justify-center items-center">
+            <ImageIcon className="size-12 text-primary/50"/>
           </div>
         )}
 

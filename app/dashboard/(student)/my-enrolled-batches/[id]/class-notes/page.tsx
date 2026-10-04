@@ -122,7 +122,7 @@ const StudentClassNotesPage = () => {
       cellClassName: "px-4 py-3 text-left",
       render: (_, row) => (
         <span className="font-medium text-primary">
-          {row.batch?.name || "—"}
+          {row.batch?.name || "-"}
         </span>
       ),
     },
@@ -154,7 +154,7 @@ const StudentClassNotesPage = () => {
               </span>
             ))}
             {types.length === 0 && (
-              <span className="text-gray-400 text-xs">—</span>
+              <span className="text-gray-400 text-xs">-</span>
             )}
           </div>
         );
@@ -201,7 +201,7 @@ const StudentClassNotesPage = () => {
             </div>
           );
         }
-        return <span className="text-gray-400 text-sm">—</span>;
+        return <span className="text-gray-400 text-sm">-</span>;
       },
     },
     {

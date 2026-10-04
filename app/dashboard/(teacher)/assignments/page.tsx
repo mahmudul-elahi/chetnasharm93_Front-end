@@ -67,7 +67,7 @@ const TeacherAssignmentsPage = () => {
       cellClassName: "px-4 py-3 whitespace-nowrap text-center font-medium",
       render: (_, row) => (
         <div className="flex items-center justify-center gap-2">
-          <span className="text-primary">{row.class?.title || "—"}</span>
+          <span className="text-primary">{row.class?.title || "-"}</span>
         </div>
       ),
     },

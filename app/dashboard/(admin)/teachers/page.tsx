@@ -196,19 +196,19 @@ const TeachersManagement = () => {
       header: "Expertise",
       accessor: "expertise",
       cellClassName: "px-4 py-3 text-center",
-      render: (value) => value || "—",
+      render: (value) => value || "-",
     },
     {
       header: "Qualification",
       accessor: "qualification",
       cellClassName: "px-4 py-3 text-center",
-      render: (value) => value || "—",
+      render: (value) => value || "-",
     },
     {
       header: "Experience",
       accessor: "years_of_exp",
       cellClassName: "px-4 py-3 text-center",
-      render: (value) => (value ? `${value} years` : "—"),
+      render: (value) => (value ? `${value} years` : "-"),
     },
     {
       header: "Status",

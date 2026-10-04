@@ -261,7 +261,7 @@ const NotificationLogs = () => {
       cellClassName: "px-4 py-3 text-left whitespace-nowrap",
       render: (_: any, row: NotificationLog) => (
         <div>
-          <p className="font-medium text-gray-900">{row.user?.name || "—"}</p>
+          <p className="font-medium text-gray-900">{row.user?.name || "-"}</p>
           <p className="text-xs text-gray-500">{row.user?.email}</p>
         </div>
       ),
@@ -272,7 +272,7 @@ const NotificationLogs = () => {
       cellClassName: "px-4 py-3 whitespace-nowrap text-left",
       render: (_: any, row: NotificationLog) => (
         <div>
-          <p className="font-medium text-gray-900">{row.batch?.name || "—"}</p>
+          <p className="font-medium text-gray-900">{row.batch?.name || "-"}</p>
         </div>
       ),
     },
@@ -295,7 +295,7 @@ const NotificationLogs = () => {
       cellClassName: "px-4 py-3 text-left max-w-md",
       render: (_: any, row: NotificationLog) => (
         <p className="text-sm text-gray-700 dark:text-gray-300 truncate max-w-md">
-          {row.message || "—"}
+          {row.message || "-"}
         </p>
       ),
     },
@@ -313,7 +313,7 @@ const NotificationLogs = () => {
         <div className="flex items-center justify-center gap-1">
           <Clock className="w-3 h-3 text-gray-400" />
           <span className="text-sm">
-            {row.sent_at ? format(row.sent_at, "dd MMM yyyy, hh:mm a") : "—"}
+            {row.sent_at ? format(row.sent_at, "dd MMM yyyy, hh:mm a") : "-"}
           </span>
         </div>
       ),

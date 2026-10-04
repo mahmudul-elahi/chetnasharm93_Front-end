@@ -64,7 +64,7 @@ export default function WhatYouGet() {
             </span>
           </h2>
           <p className="text-gray-600 text-lg">
-            Learn, Practice, Improve — With Real Structure
+            Learn, Practice, Improve - With Real Structure
           </p>
         </div>
 

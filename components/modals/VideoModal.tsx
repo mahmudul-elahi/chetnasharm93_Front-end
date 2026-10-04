@@ -266,18 +266,7 @@ const VideoModal: React.FC<VideoModalProps> = ({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
-  // Handle escape key to close modal
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        handleClose();
-      }
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen]);
-
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     // Pause video immediately
     if (videoRef.current) {
       videoRef.current.pause();
@@ -288,7 +277,18 @@ const VideoModal: React.FC<VideoModalProps> = ({
     setTimeout(() => {
       onClose();
     }, 300);
-  };
+  }, [onClose]);
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        handleClose();
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, handleClose]);
 
   if (!isOpen && !isAnimating) return null;
 

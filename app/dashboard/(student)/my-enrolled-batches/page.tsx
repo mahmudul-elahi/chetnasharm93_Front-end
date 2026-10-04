@@ -69,7 +69,7 @@ const MyEnrolledBatches = () => {
       cellClassName: "px-4 py-3 text-center font-medium",
       render: (_, row) => (
         <div className="flex items-center justify-center gap-2">
-          <span className="text-primary">{row.class?.title || "—"}</span>
+          <span className="text-primary">{row.class?.title || "-"}</span>
         </div>
       ),
     },
@@ -78,7 +78,7 @@ const MyEnrolledBatches = () => {
       cellClassName: "px-4 py-3 text-center",
       render: (_, row) => (
         <span className="text-gray-700 dark:text-gray-300 whitespace-nowrap">
-          {row.teacher?.name || "—"}
+          {row.teacher?.name || "-"}
         </span>
       ),
     },
@@ -113,7 +113,7 @@ const MyEnrolledBatches = () => {
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${colorClass}`}
           >
-            {row.status || "—"}
+            {row.status || "-"}
           </span>
         );
       },

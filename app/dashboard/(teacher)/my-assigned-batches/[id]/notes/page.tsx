@@ -176,7 +176,7 @@ const ClassNotesPage = () => {
       cellClassName: "px-4 py-3 text-left",
       render: (_: any, row: Note) => (
         <span className="text-primary font-medium">
-          {row.batch?.name || "—"}
+          {row.batch?.name || "-"}
         </span>
       ),
     },
@@ -208,7 +208,7 @@ const ClassNotesPage = () => {
               </span>
             ))}
             {types.length === 0 && (
-              <span className="text-gray-400 text-xs">—</span>
+              <span className="text-gray-400 text-xs">-</span>
             )}
           </div>
         );
@@ -258,7 +258,7 @@ const ClassNotesPage = () => {
             </a>
           );
         }
-        return <span className="text-gray-400 text-sm">—</span>;
+        return <span className="text-gray-400 text-sm">-</span>;
       },
     },
     {

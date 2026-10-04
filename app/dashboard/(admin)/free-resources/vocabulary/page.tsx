@@ -164,7 +164,7 @@ const VocabularyManagementPage = () => {
       cellClassName: "px-4 py-3 text-left max-w-xs",
       render: (value) => (
         <p className="truncate max-w-50 italic text-gray-600" title={value}>
-          "{value || "—"}"
+          "{value || "-"}"
         </p>
       ),
     },
@@ -172,7 +172,7 @@ const VocabularyManagementPage = () => {
       header: "Pronunciation",
       accessor: "pronunciation",
       cellClassName: "px-4 py-3 text-center",
-      render: (value) => <span className="text-gray-600">{value || "—"}</span>,
+      render: (value) => <span className="text-gray-600">{value || "-"}</span>,
     },
     {
       header: "Part of Speech",
@@ -180,7 +180,7 @@ const VocabularyManagementPage = () => {
       cellClassName: "px-4 py-3 text-center",
       render: (value) => (
         <span className="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-600">
-          {value || "—"}
+          {value || "-"}
         </span>
       ),
     },

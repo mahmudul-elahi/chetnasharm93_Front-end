@@ -15,7 +15,7 @@ export default function TeacherSettings() {
     "Every class you teach changes a life.",
     "Your students remember you forever.",
     "Teaching is the greatest act of optimism.",
-    "You're not just teaching language — you're building bridges.",
+    "You're not just teaching language - you're building bridges.",
   ];
 
   const affirmations = [

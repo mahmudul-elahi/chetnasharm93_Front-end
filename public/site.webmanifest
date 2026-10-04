@@ -1,6 +1,8 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Listenact - Learn English Live",
+  "short_name": "Listenact",
+  "description": "Learn English Live with Expert Teachers in Real-Time",
+  "start_url": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

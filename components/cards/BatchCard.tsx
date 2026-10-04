@@ -29,7 +29,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const bookedPercentage = (batch.filled_seat / batch.total_seat) * 100;
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return "—";
+    if (!dateString) return "-";
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",

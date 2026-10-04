@@ -109,13 +109,13 @@ const BatchManagement = () => {
       header: "Class",
       cellClassName: "px-4 py-3 text-center font-medium",
       render: (_, row) => (
-        <span className="text-primary">{row.class?.title || "—"}</span>
+        <span className="text-primary">{row.class?.title || "-"}</span>
       ),
     },
     {
       header: "Teacher",
       cellClassName: "px-4 py-3 text-center whitespace-nowrap",
-      render: (_, row) => <span>{row.teacher?.name || "—"}</span>,
+      render: (_, row) => <span>{row.teacher?.name || "-"}</span>,
     },
     {
       header: "Start Date - End Date",
@@ -133,7 +133,7 @@ const BatchManagement = () => {
       header: "Total Seat",
       accessor: "total_seat",
       cellClassName: "px-4 py-3 text-center",
-      render: (value) => <p className="truncate max-w-50">{value || "—"}</p>,
+      render: (value) => <p className="truncate max-w-50">{value || "-"}</p>,
     },
     {
       header: "Filled Seat",
@@ -162,7 +162,7 @@ const BatchManagement = () => {
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${colorClass}`}
           >
-            {row.status || "—"}
+            {row.status || "-"}
           </span>
         );
       },
@@ -187,7 +187,7 @@ const BatchManagement = () => {
               ? "Active"
               : row.active_status === 0
                 ? "Deactivated"
-                : "—"}
+                : "-"}
           </span>
         );
       },

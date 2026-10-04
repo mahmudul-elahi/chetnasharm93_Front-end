@@ -201,9 +201,7 @@ export default function LiveGroupClasses() {
   const handleProgressDragEnd = useCallback(() => {
     isDraggingRef.current = false;
     window.removeEventListener("mousemove", handleProgressDragMove);
-    window.removeEventListener("mouseup", handleProgressDragEnd);
     window.removeEventListener("touchmove", handleProgressDragMove);
-    window.removeEventListener("touchend", handleProgressDragEnd);
   }, [handleProgressDragMove]);
 
   const handleProgressDragStart = useCallback(
@@ -214,9 +212,9 @@ export default function LiveGroupClasses() {
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       seekTo(clientX);
       window.addEventListener("mousemove", handleProgressDragMove);
-      window.addEventListener("mouseup", handleProgressDragEnd);
+      window.addEventListener("mouseup", handleProgressDragEnd, { once: true });
       window.addEventListener("touchmove", handleProgressDragMove);
-      window.addEventListener("touchend", handleProgressDragEnd);
+      window.addEventListener("touchend", handleProgressDragEnd, { once: true });
     },
     [seekTo, handleProgressDragMove, handleProgressDragEnd],
   );
@@ -245,9 +243,7 @@ export default function LiveGroupClasses() {
   const handleVolumeDragEnd = useCallback(() => {
     isDraggingVolumeRef.current = false;
     window.removeEventListener("mousemove", handleVolumeDragMove);
-    window.removeEventListener("mouseup", handleVolumeDragEnd);
     window.removeEventListener("touchmove", handleVolumeDragMove);
-    window.removeEventListener("touchend", handleVolumeDragEnd);
   }, [handleVolumeDragMove]);
 
   const handleVolumeDragStart = useCallback(
@@ -259,9 +255,9 @@ export default function LiveGroupClasses() {
       const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       applyVolume(clientX);
       window.addEventListener("mousemove", handleVolumeDragMove);
-      window.addEventListener("mouseup", handleVolumeDragEnd);
+      window.addEventListener("mouseup", handleVolumeDragEnd, { once: true });
       window.addEventListener("touchmove", handleVolumeDragMove);
-      window.addEventListener("touchend", handleVolumeDragEnd);
+      window.addEventListener("touchend", handleVolumeDragEnd, { once: true });
     },
     [applyVolume, handleVolumeDragMove, handleVolumeDragEnd],
   );

@@ -59,7 +59,7 @@ const AboutUs = () => {
       icon: FaComments,
       title: "Speaking First Method",
       description:
-        "You'll speak from day one. No boring grammar drills — just real communication.",
+        "You'll speak from day one. No boring grammar drills - just real communication.",
     },
     {
       icon: FaClock,
@@ -93,7 +93,7 @@ const AboutUs = () => {
 
           <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
             Live, interactive classes in English, French, Punjabi, and Hindi.
-            Learn from native speakers in small groups — anywhere, anytime.
+            Learn from native speakers in small groups - anywhere, anytime.
           </p>
         </div>
 
@@ -149,7 +149,7 @@ const AboutUs = () => {
                     </h3>
                     <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
                       Master {lang.name} with our immersive live classes. From
-                      beginner to fluent — your journey starts here.
+                      beginner to fluent - your journey starts here.
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
                       <div className="flex items-center gap-2 text-gray-700">
@@ -194,7 +194,7 @@ const AboutUs = () => {
                   We believe language is more than vocabulary and grammar. It's
                   about connection, culture, and confidence. Our live platform
                   brings you face-to-face with native speakers who don't just
-                  teach — they inspire.
+                  teach - they inspire.
                 </p>
                 <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                   <span className="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 border border-gray-200">
@@ -250,7 +250,7 @@ const AboutUs = () => {
           </div>
 
           <p className="text-gray-400 text-sm mt-10 tracking-wide">
-            © 2025 ListenAct — Live Language Learning Platform
+            © 2025 ListenAct - Live Language Learning Platform
           </p>
         </div>
       </div>

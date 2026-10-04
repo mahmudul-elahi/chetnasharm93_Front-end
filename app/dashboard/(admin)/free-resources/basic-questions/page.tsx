@@ -143,7 +143,7 @@ const BasicQuestionManagementPage = () => {
             value,
           )}`}
         >
-          {value || "—"}
+          {value || "-"}
         </span>
       ),
     },

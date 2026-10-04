@@ -96,7 +96,7 @@ export default function SmartAssignments() {
               </span>
             </h2>
             <p className="text-gray-600 text-lg">
-              Not busy work — focused tasks that build real skills
+              Not busy work - focused tasks that build real skills
             </p>
           </div>
         </div>

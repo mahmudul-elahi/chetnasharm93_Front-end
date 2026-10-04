@@ -83,7 +83,6 @@ const TeachersSection = () => {
     return filteredTutors.slice(0, 6);
   }, [filteredTutors]);
 
-  console.log(displayedTutors);
   // Calculate stats
   const stats = useMemo(() => {
     const totalStudents = 12580; // Mock data since API doesn't provide student count
@@ -113,35 +112,35 @@ const TeachersSection = () => {
   }
 
   return (
-    <section className="py-20 relative bg-white overflow-hidden">
+    <section className="py-14 sm:py-16 md:py-20 relative bg-white overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl animate-pulse" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/5 to-secondary/5 rounded-full blur-3xl" />
 
-      <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-350 mx-auto px-5 sm:px-6 lg:px-8 relative">
         {/* Header Section */}
-        <div className="text-center mb-12 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4 backdrop-blur-sm">
+        <div className="text-center mb-8 sm:mb-12 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 bg-primary/10 rounded-full mb-3 sm:mb-4 backdrop-blur-sm">
             <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-sm font-medium text-primary">
+            <span className="text-xs sm:text-sm font-medium text-primary">
               Expert Instructors
             </span>
           </div>
 
-          <div className="text-center max-w-4xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+          <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
               Practice English with{" "}
               <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent">
                 expert teachers
               </span>
             </h2>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 text-base sm:text-lg">
               Learn with classmates in real-time, interactive sessions
             </p>
           </div>
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto mt-6 sm:mt-8">
             <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
               <div className="flex items-center justify-center mb-2">
                 <UsersRound className="w-6 h-6 text-primary" />
@@ -235,7 +234,15 @@ const TeachersSection = () => {
           />
         ) : displayedTutors.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+              className={`grid grid-cols-1 gap-8 ${
+                displayedTutors.length === 1
+                  ? "max-w-md mx-auto"
+                  : displayedTutors.length === 2
+                  ? "md:grid-cols-2 max-w-4xl mx-auto"
+                  : "md:grid-cols-2 lg:grid-cols-3"
+              }`}
+            >
               {displayedTutors.map((teacher) => (
                 <TutorCard key={teacher.id} tutor={teacher} />
               ))}

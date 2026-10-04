@@ -279,7 +279,7 @@ const EnrollmentsPage = () => {
             <UserRound className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{row.user?.name || "—"}</p>
+            <p className="font-medium text-gray-900">{row.user?.name || "-"}</p>
             <p className="text-xs text-gray-500">{row.user?.email}</p>
           </div>
         </div>
@@ -291,7 +291,7 @@ const EnrollmentsPage = () => {
       cellClassName: "px-4 py-3 text-left",
       render: (_: any, row: Enrollment) => (
         <div>
-          <p className="font-medium text-gray-900">{row.batch?.name || "—"}</p>
+          <p className="font-medium text-gray-900">{row.batch?.name || "-"}</p>
           <p className="text-xs text-gray-500">Batch ID: {row.batch_id}</p>
         </div>
       ),
@@ -303,7 +303,7 @@ const EnrollmentsPage = () => {
       render: (_: any, row: Enrollment) => (
         <div className="flex items-center gap-2">
           <Package className="w-4 h-4 text-gray-400" />
-          <span className="text-gray-700">{row.class?.title || "—"}</span>
+          <span className="text-gray-700">{row.class?.title || "-"}</span>
         </div>
       ),
     },

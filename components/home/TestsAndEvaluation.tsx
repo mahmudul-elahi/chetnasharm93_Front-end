@@ -13,13 +13,12 @@ import {
   Star,
   Users,
   Zap,
-  ChevronsLeft,
+  ChevronLeft,
   ChevronRight
 } from "lucide-react";
 
 export default function TestsAndEvaluation() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
 
   const courseDurations = [
     {
@@ -64,18 +63,6 @@ export default function TestsAndEvaluation() {
     { icon: Clock, text: "Flexible test schedule" }
   ];
 
-  // Check if mobile on mount and on resize
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % courseDurations.length);
   };
@@ -85,21 +72,21 @@ export default function TestsAndEvaluation() {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="max-w-350 px-4 sm:px-6 lg:px-8 mx-auto">
+    <section className="py-14 sm:py-16 md:py-20 bg-white">
+      <div className="max-w-350 px-5 sm:px-6 lg:px-8 mx-auto">
         {/* Header */}
-        <div className="text-center mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             <Target className="w-4 h-4" />
             Tests & Evaluation
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-            Track Your{" "}
-            <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent">
-              Progress & Get Certified
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
+            <span className="block sm:inline">Track Your Progress & </span>
+            <span className="bg-linear-to-r from-primary via-primary/90 to-secondary bg-clip-text text-transparent block sm:inline">
+              Get Certified
             </span>
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600">
             Regular tests and final evaluation based on your course duration
           </p>
         </div>
@@ -145,74 +132,72 @@ export default function TestsAndEvaluation() {
         </div>
 
         {/* Mobile Slider */}
-        {isMobile && (
-          <div className="md:hidden relative mb-12">
-            <div className="overflow-hidden">
-              <div 
-                className="flex transition-transform duration-300 ease-out"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {courseDurations.map((course) => (
-                  <div key={course.duration} className="w-full shrink-0 px-2">
-                    <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
-                      <div className={`h-1 bg-linear-to-r ${course.gradient}`} />
-                      <div className="p-5">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <course.icon className="w-6 h-6 text-primary" />
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xl font-bold text-primary">{course.duration}</p>
-                            <p className="text-xs text-gray-500">Course</p>
-                          </div>
+        <div className="block md:hidden relative mb-12">
+          <div className="overflow-hidden">
+            <div 
+              className="flex transition-transform duration-300 ease-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {courseDurations.map((course) => (
+                <div key={course.duration} className="w-full shrink-0 px-2">
+                  <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+                    <div className={`h-1 bg-linear-to-r ${course.gradient}`} />
+                    <div className="p-5">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <course.icon className="w-6 h-6 text-primary" />
                         </div>
-                        
-                        <div className="space-y-3">
-                          {course.items.map((item, idx) => (
-                            <div key={idx} className="flex items-center gap-2">
-                              <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                              <span className="text-sm text-gray-600">{item}</span>
-                            </div>
-                          ))}
+                        <div className="text-right">
+                          <p className="text-xl font-bold text-primary">{course.duration}</p>
+                          <p className="text-xs text-gray-500">Course</p>
                         </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        {course.items.map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                            <span className="text-sm text-gray-600">{item}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Navigation Buttons */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center active:scale-95 transition-all"
-              aria-label="Previous slide"
-            >
-              <ChevronsLeft className="w-4 h-4 text-gray-600" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 w-8 h-8 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center active:scale-95 transition-all"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="w-4 h-4 text-gray-600" />
-            </button>
-
-            {/* Dots Indicator */}
-            <div className="flex justify-center gap-2 mt-4">
-              {courseDurations.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentSlide(idx)}
-                  className={`h-2 rounded-full transition-all ${
-                    currentSlide === idx ? "w-6 bg-primary" : "w-2 bg-gray-300"
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
+                </div>
               ))}
             </div>
           </div>
-        )}
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-9 h-9 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center active:scale-95 transition-all z-10"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-700" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 w-9 h-9 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center active:scale-95 transition-all z-10"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-5 h-5 text-gray-700" />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-4">
+            {courseDurations.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                className={`h-2 rounded-full transition-all ${
+                  currentSlide === idx ? "w-6 bg-primary" : "w-2 bg-gray-300"
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </div>
 
         {/* Test Schedule Overview - Desktop */}
         <div className="hidden md:block max-w-4xl mx-auto mb-12">
@@ -242,25 +227,23 @@ export default function TestsAndEvaluation() {
         </div>
 
         {/* Mobile Overview - Simplified */}
-        {isMobile && (
-          <div className="md:hidden max-w-4xl mx-auto mb-12">
-            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
-              <h3 className="text-md font-bold text-gray-900 text-center mb-4">
-                Based on Your Course
-              </h3>
-              <div className="space-y-4">
-                {courseDurations.map((course) => (
-                  <div key={course.duration} className="text-center">
-                    <div className={`inline-block px-3 py-1 rounded-full bg-${course.color}-100 text-${course.color}-700 text-xs font-medium mb-2`}>
-                      {course.duration} Course
-                    </div>
-                    <p className="text-sm text-gray-600">{course.tests} • {course.finalExam}</p>
+        <div className="block md:hidden max-w-4xl mx-auto mb-12">
+          <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+            <h3 className="text-md font-bold text-gray-900 text-center mb-4">
+              Based on Your Course
+            </h3>
+            <div className="space-y-4">
+              {courseDurations.map((course) => (
+                <div key={course.duration} className="text-center">
+                  <div className={`inline-block px-3 py-1 rounded-full bg-${course.color}-100 text-${course.color}-700 text-xs font-medium mb-2`}>
+                    {course.duration} Course
                   </div>
-                ))}
-              </div>
+                  <p className="text-sm text-gray-600">{course.tests} • {course.finalExam}</p>
+                </div>
+              ))}
             </div>
           </div>
-        )}
+        </div>
 
         {/* Benefits Row */}
         <div className="flex flex-wrap justify-center gap-4">
