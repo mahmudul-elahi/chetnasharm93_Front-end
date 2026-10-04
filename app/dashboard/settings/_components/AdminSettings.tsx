@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import MyButton from "@/components/ui/MyButton";
 import Loader from "@/components/ui/Loader";
 import PhoneInput from "react-phone-input-2";
+import { getBrowserCountry } from "@/lib/phone";
 import "../../../../style/phone-input.css";
 import "react-phone-input-2/lib/style.css";
 import {
@@ -37,16 +38,28 @@ export default function AdminSettings() {
     supportEmail: "",
   });
 
-  // Format phone number to remove + for display in PhoneInput
+  // Format phone number for display in PhoneInput
   const formatPhoneForDisplay = (phone: string): string => {
     if (!phone) return "";
-    return phone.replace(/^\+/, "");
+    let cleaned = phone.trim().replace(/^\+/, "");
+    if (cleaned.startsWith("0")) {
+      cleaned = cleaned.replace(/^0+/, "");
+      return `880${cleaned}`;
+    }
+    return cleaned;
   };
 
   // Format phone number to E.164 format (with +) for API
   const formatPhoneForAPI = (phone: string): string => {
     if (!phone) return "";
-    const cleaned = phone.replace(/\s/g, "");
+    let cleaned = phone.replace(/[\s\-\(\)]/g, "");
+    if (cleaned.startsWith("+0")) {
+      cleaned = cleaned.slice(2);
+      if (!cleaned.startsWith("0")) cleaned = "0" + cleaned;
+    }
+    if (/^01[3-9]\d{8}$/.test(cleaned)) {
+      return `+88${cleaned}`;
+    }
     return cleaned.startsWith("+") ? cleaned : `+${cleaned}`;
   };
 
@@ -299,7 +312,7 @@ export default function AdminSettings() {
               />
             ) : (
               <PhoneInput
-                country={"us"}
+                country={getBrowserCountry()}
                 value={supportNumber}
                 onChange={(phone) => setSupportNumber(phone)}
                 inputProps={{

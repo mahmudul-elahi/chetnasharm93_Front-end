@@ -29,7 +29,7 @@ import Link from "next/link";
 import Loader from "@/components/ui/Loader";
 import ActionButton from "@/components/ui/ActionButton";
 import UpdateZoomLinkModal from "./components/UpdateZoomLinkModal";
-import { convertUtcScheduleToLocal } from "@/src/utils/timezone";
+import { convertUtcScheduleToLocal, getNextUpcomingClass } from "@/src/utils/timezone";
 import { ApiResponse, Schedule } from "@/types/batchesForTeacher";
 
 const BatchDetailsPageForTeacher = () => {
@@ -322,10 +322,12 @@ const BatchDetailsPageForTeacher = () => {
 
               {/* Next Class Info */}
               {schedules && schedules.length > 0 && (() => {
-                const firstLocal = convertUtcScheduleToLocal(
-                  schedules[0].day_of_week,
-                  schedules[0].start_time,
-                  schedules[0].end_time
+                const nextSchedule = getNextUpcomingClass(schedules);
+                if (!nextSchedule) return null;
+                const nextLocal = convertUtcScheduleToLocal(
+                  nextSchedule.day_of_week,
+                  nextSchedule.start_time,
+                  nextSchedule.end_time
                 );
                 return (
                   <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
@@ -338,10 +340,10 @@ const BatchDetailsPageForTeacher = () => {
                       </div>
                       <div>
                         <p className="font-medium text-gray-800">
-                          {firstLocal.day}
+                          {nextLocal.day}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {firstLocal.timeString}
+                          {nextLocal.timeString}
                         </p>
                       </div>
                     </div>

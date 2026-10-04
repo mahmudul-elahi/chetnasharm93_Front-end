@@ -10,6 +10,7 @@ import PhoneInput from "react-phone-input-2";
 import "../../../../style/phone-input.css";
 import "react-phone-input-2/lib/style.css";
 import { Button } from "@/components/ui/button";
+import { getBrowserCountry } from "@/lib/phone";
 
 interface EditProfileProps {
   user: any;
@@ -22,17 +23,49 @@ export default function EditProfile({
   onClose,
   onUpdate,
 }: EditProfileProps) {
+  const formatPhoneForDisplay = (phone: string): string => {
+    if (!phone) return "";
+    let cleaned = phone.trim().replace(/^\+/, "");
+    if (cleaned.startsWith("0")) {
+      cleaned = cleaned.replace(/^0+/, "");
+      return `880${cleaned}`;
+    }
+    return cleaned;
+  };
+
+  const formatPhoneForAPI = (phone: string): string => {
+    if (!phone) return "";
+    let cleaned = phone.replace(/[\s\-\(\)]/g, "");
+    if (cleaned.startsWith("+0")) {
+      cleaned = cleaned.slice(2);
+      if (!cleaned.startsWith("0")) cleaned = "0" + cleaned;
+    }
+    if (/^01[3-9]\d{8}$/.test(cleaned)) {
+      return `+88${cleaned}`;
+    }
+    return cleaned.startsWith("+") ? cleaned : `+${cleaned}`;
+  };
+
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
   const [mobile, setMobile] = useState<string>(() => {
-    const initialMobile = user?.mobile || "";
-    return initialMobile.replace(/^\+/, "");
+    return formatPhoneForDisplay(user?.mobile || "");
   });
   const [department, setDepartment] = useState(user?.department || "");
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState(user?.image_url || "");
   const [isClosing, setIsClosing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+      setMobile(formatPhoneForDisplay(user.mobile || ""));
+      setDepartment(user.department || "");
+      setPreviewUrl(user.image_url || "");
+    }
+  }, [user]);
 
   const [
     profileUpdate,
@@ -92,11 +125,7 @@ export default function EditProfile({
     }
   };
 
-  // Format phone number to E.164 format (with +)
-  const formatPhoneNumber = (phone: string): string => {
-    const cleaned = phone.replace(/\s/g, "");
-    return cleaned.startsWith("+") ? cleaned : `+${cleaned}`;
-  };
+
 
   // Validate email format
   const isValidEmail = (email: string): boolean => {
@@ -128,7 +157,7 @@ export default function EditProfile({
     }
 
     // Format mobile number for backend
-    const formattedMobile = formatPhoneNumber(mobile);
+    const formattedMobile = formatPhoneForAPI(mobile);
 
     // Validate phone number length
     const digitsOnly = formattedMobile.replace(/\D/g, "");
@@ -277,7 +306,7 @@ export default function EditProfile({
                   Mobile Number <span className="text-red-500">*</span>
                 </label>
                 <PhoneInput
-                  country={"us"}
+                  country={getBrowserCountry()}
                   value={mobile}
                   onChange={(phone) => setMobile(phone)}
                   inputProps={{

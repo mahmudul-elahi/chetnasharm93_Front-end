@@ -197,3 +197,34 @@ export const convertScheduleToLocal = (
 ) => {
   return convertUtcScheduleToLocal(dayOfWeek, startTime, endTime);
 };
+
+/**
+ * Find the next upcoming schedule occurrence relative to current time.
+ */
+export const getNextUpcomingClass = <T extends { day_of_week: number | string; start_time: string; end_time?: string }>(
+  schedules: T[] | undefined,
+): T | null => {
+  if (!schedules || schedules.length === 0) return null;
+  const now = new Date();
+  const currentUtcDay = now.getUTCDay();
+  const currentUtcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+  let closest: T | null = null;
+  let minDiff = Infinity;
+
+  for (const s of schedules) {
+    const dayNum = Number(s.day_of_week);
+    const [h = 0, m = 0] = s.start_time.split(":").map(Number);
+    const targetMinutes = h * 60 + m;
+    let dayDiff = ((dayNum - currentUtcDay) % 7 + 7) % 7;
+    if (dayDiff === 0 && targetMinutes <= currentUtcMinutes) {
+      dayDiff = 7;
+    }
+    const totalDiffMinutes = dayDiff * 24 * 60 + (targetMinutes - currentUtcMinutes);
+    if (totalDiffMinutes < minDiff) {
+      minDiff = totalDiffMinutes;
+      closest = s;
+    }
+  }
+  return closest || schedules[0];
+};

@@ -23,6 +23,7 @@ import {
 import Loader from "@/components/ui/Loader";
 import { Button } from "@/components/ui/button";
 import PhoneInput from "react-phone-input-2";
+import { getBrowserCountry } from "@/lib/phone";
 import "react-phone-input-2/lib/style.css";
 import { getAllCountries, getTimezonesForCountry } from "countries-and-timezones";
 import SearchableSelect from "@/components/ui/SearchableSelect";
@@ -50,6 +51,7 @@ export default function UpdateTeacherModal({
   const [yearsOfExp, setYearsOfExp] = useState<number>(0);
   const [suspendStatus, setSuspendStatus] = useState<number>(0);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [phoneCountry, setPhoneCountry] = useState<string>(() => getBrowserCountry());
   const [selectedTimezone, setSelectedTimezone] = useState<string>("");
   const [availableTimezones, setAvailableTimezones] = useState<string[]>([]);
 
@@ -78,17 +80,35 @@ export default function UpdateTeacherModal({
 
   const formatPhoneForDisplay = (phone: string): string => {
     if (!phone) return "";
-    return phone.replace(/^\+/, "");
+    let cleaned = phone.trim().replace(/^\+/, "");
+    if (cleaned.startsWith("0")) {
+      cleaned = cleaned.replace(/^0+/, "");
+      return `880${cleaned}`;
+    }
+    return cleaned;
   };
 
   const formatPhoneForAPI = (phone: string): string => {
     if (!phone) return "";
-    const cleaned = phone.replace(/\s/g, "");
+    let cleaned = phone.replace(/[\s\-\(\)]/g, "");
+    if (cleaned.startsWith("+0")) {
+      cleaned = cleaned.slice(2);
+      if (!cleaned.startsWith("0")) cleaned = "0" + cleaned;
+    }
+    if (/^01[3-9]\d{8}$/.test(cleaned)) {
+      return `+88${cleaned}`;
+    }
     return cleaned.startsWith("+") ? cleaned : `+${cleaned}`;
   };
 
   const handleCountryChange = (countryCode: string) => {
     setSelectedCountry(countryCode);
+      if (countryCode) {
+        setPhoneCountry(countryCode.toLowerCase());
+      }
+    if (countryCode) {
+      setPhoneCountry(countryCode.toLowerCase());
+    }
 
     if (countryCode) {
       const timezones = getTimezonesForCountry(countryCode);
@@ -131,6 +151,9 @@ export default function UpdateTeacherModal({
       // Set country and timezone
       const countryCode = teacher.country || "";
       setSelectedCountry(countryCode);
+      if (countryCode) {
+        setPhoneCountry(countryCode.toLowerCase());
+      }
       setSelectedTimezone(teacher.timezone || "");
 
       if (countryCode) {
@@ -393,7 +416,7 @@ export default function UpdateTeacherModal({
                   Mobile Number 
                 </label>
                 <PhoneInput
-                  country={"us"}
+                  country={phoneCountry}
                   value={mobile}
                   onChange={(phone) => setMobile(phone)}
                   inputProps={{ name: "mobile" }}

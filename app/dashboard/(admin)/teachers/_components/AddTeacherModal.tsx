@@ -16,6 +16,7 @@ import "../../../../../style/phone-input.css";
 import { getAllCountries, getTimezonesForCountry } from "countries-and-timezones";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import TagInput from "@/components/ui/TagInput";
+import { getBrowserCountry } from "@/lib/phone";
 
 interface AddTeacherModalProps {
   isOpen: boolean;
@@ -88,6 +89,7 @@ const AddTeacherModal: React.FC<AddTeacherModalProps> = ({
   const [mobile, setMobile] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [availableTimezones, setAvailableTimezones] = useState<string[]>([]);
+  const [phoneCountry, setPhoneCountry] = useState<string>(() => getBrowserCountry());
 
   // Array fields state
   const [specializations, setSpecializations] = useState<string[]>([]);
@@ -145,6 +147,7 @@ const AddTeacherModal: React.FC<AddTeacherModalProps> = ({
     setValue("timezone", "");
 
     if (countryCode) {
+      setPhoneCountry(countryCode.toLowerCase());
       const timezones = getTimezonesForCountry(countryCode);
       if (timezones && timezones.length > 0) {
         setAvailableTimezones(timezones.map((tz) => tz.name));
@@ -169,6 +172,7 @@ const AddTeacherModal: React.FC<AddTeacherModalProps> = ({
       setVideoFileName("");
       setMobile("");
       setSelectedCountry("");
+      setPhoneCountry(getBrowserCountry());
       setAvailableTimezones([]);
       setSpecializations([]);
       setLanguagesSpoken([]);
@@ -246,7 +250,15 @@ const AddTeacherModal: React.FC<AddTeacherModalProps> = ({
   }, [isOpen, onClose]);
 
   const formatPhoneNumber = (phone: string): string => {
-    const cleaned = phone.replace(/\s/g, "");
+    if (!phone) return "";
+    let cleaned = phone.replace(/[\s\-\(\)]/g, "");
+    if (cleaned.startsWith("+0")) {
+      cleaned = cleaned.slice(2);
+      if (!cleaned.startsWith("0")) cleaned = "0" + cleaned;
+    }
+    if (/^01[3-9]\d{8}$/.test(cleaned)) {
+      return `+88${cleaned}`;
+    }
     return cleaned.startsWith("+") ? cleaned : `+${cleaned}`;
   };
 
@@ -300,6 +312,7 @@ const AddTeacherModal: React.FC<AddTeacherModalProps> = ({
       reset();
       setMobile("");
       setSelectedCountry("");
+      setPhoneCountry(getBrowserCountry());
       setAvailableTimezones([]);
       setSpecializations([]);
       setLanguagesSpoken([]);
@@ -422,7 +435,7 @@ const AddTeacherModal: React.FC<AddTeacherModalProps> = ({
                   Mobile Number  
                 </label>
                 <PhoneInput
-                  country={"us"}
+                  country={phoneCountry}
                   value={mobile}
                   onChange={(phone) => {
                     setMobile(phone);
