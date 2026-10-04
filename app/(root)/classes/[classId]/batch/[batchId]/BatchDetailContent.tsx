@@ -26,7 +26,7 @@ import { useCreatePaymentMutation } from "@/src/redux/api/student/studentPayment
 import { useAuth } from "@/hooks/useAuth";
 import BatchDetailSkeleton from "../../_components/BatchDetailSkeleton";
 import AddToWishListButton from "../../_components/AddToWishListButton";
-import { formatLocalSchedule } from "@/src/utils/timezone";
+import { convertUtcScheduleToLocal } from "@/src/utils/timezone";
 
 interface PaymentMethod {
   id: "stripe" | "paypal" | "token";
@@ -230,22 +230,29 @@ export default function BatchDetailContent({ batchId: propBatchId }: { batchId?:
                       Class Schedule
                     </h3>
                     <div className="space-y-2">
-                      {batchData.schedules.map((schedule: any) => (
-                        <div
-                          key={schedule.id}
-                          className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
-                        >
-                          <Calendar className="w-4 h-4 text-primary" />
-                          <span className="font-medium">
-                            {formatLocalSchedule(
-                              batchData.teacher?.timezone || "UTC",
-                              schedule.day_of_week,
-                              schedule.start_time,
-                              schedule.end_time
-                            )}
-                          </span>
-                        </div>
-                      ))}
+                      {batchData.schedules.map((schedule: any) => {
+                        const localSchedule = convertUtcScheduleToLocal(
+                          schedule.day_of_week,
+                          schedule.start_time,
+                          schedule.end_time
+                        );
+                        return (
+                          <div
+                            key={schedule.id}
+                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <Calendar className="w-4 h-4 text-primary" />
+                              <span className="font-semibold text-gray-800 text-sm">
+                                {localSchedule.day}
+                              </span>
+                            </div>
+                            <span className="font-medium text-gray-700 text-sm">
+                              {localSchedule.timeString}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}

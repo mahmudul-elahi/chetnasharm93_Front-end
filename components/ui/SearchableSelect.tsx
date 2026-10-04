@@ -24,6 +24,7 @@ interface SearchableSelectProps {
   searchPlaceholder?: string;
   disabled?: boolean;
   error?: boolean;
+  className?: string;
 }
 
 const SearchableSelect = ({
@@ -34,6 +35,7 @@ const SearchableSelect = ({
   searchPlaceholder = "Search...",
   disabled = false,
   error = false,
+  className,
 }: SearchableSelectProps) => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -64,11 +66,12 @@ const SearchableSelect = ({
           type="button"
           disabled={disabled}
           className={cn(
-            "w-full flex items-center justify-between px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all",
+            "w-full h-[42px] flex items-center justify-between px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all",
             error
               ? "border-red-500"
               : "border-gray-300 dark:border-gray-600",
-            disabled && "opacity-50 cursor-not-allowed"
+            disabled && "opacity-50 cursor-not-allowed",
+            className
           )}
         >
           <span

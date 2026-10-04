@@ -38,6 +38,7 @@ import {
   useUpdateActiveStatusBatchForAdminMutation,
 } from "@/src/redux/api/admin/adminBatchesApi";
 import Loader from "@/components/ui/Loader";
+import { convertUtcScheduleToLocal } from "@/src/utils/timezone";
 import MyButton from "@/components/ui/MyButton";
 import ActionButton from "@/components/ui/ActionButton";
 import { toast } from "sonner";
@@ -590,30 +591,36 @@ export default function BatchDetailsPage() {
             </h2>
             {batch.schedules && batch.schedules.length > 0 ? (
               <div className="space-y-3">
-                {batch.schedules.map((schedule: any) => (
-                  <div
-                    key={schedule.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-24 font-medium text-gray-900 dark:text-white">
-                        {daysOfWeek[schedule.day_of_week]}
+                {batch.schedules.map((schedule: any) => {
+                  const local = convertUtcScheduleToLocal(
+                    schedule.day_of_week,
+                    schedule.start_time,
+                    schedule.end_time
+                  );
+                  return (
+                    <div
+                      key={schedule.id}
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-24 font-medium text-gray-900 dark:text-white">
+                          {local.day}
+                        </div>
+                        <div className="text-gray-600 dark:text-gray-300">
+                          {local.timeString}
+                        </div>
                       </div>
-                      <div className="text-gray-600 dark:text-gray-300">
-                        {formatTime(schedule.start_time)} -{" "}
-                        {formatTime(schedule.end_time)}
-                      </div>
+                      {schedule.reminder_sent_date && (
+                        <span className="text-xs text-green-600 dark:text-green-400">
+                          Reminder sent:{" "}
+                          {new Date(
+                            schedule.reminder_sent_date,
+                          ).toLocaleDateString()}
+                        </span>
+                      )}
                     </div>
-                    {schedule.reminder_sent_date && (
-                      <span className="text-xs text-green-600 dark:text-green-400">
-                        Reminder sent:{" "}
-                        {new Date(
-                          schedule.reminder_sent_date,
-                        ).toLocaleDateString()}
-                      </span>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">

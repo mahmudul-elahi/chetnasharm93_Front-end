@@ -377,8 +377,8 @@ export default function AddTimeSlotModal({
                       <p className="font-medium mb-1">Important Notes:</p>
                       <ul className="list-disc list-inside space-y-1">
                         <li>
-                          All times are in <strong>24-hour format</strong>{" "}
-                          (e.g., 09:00 for 9 AM, 14:00 for 2 PM)
+                          All schedule times are in <strong>UTC (Universal Time)</strong> and <strong>24-hour format</strong>{" "}
+                          (e.g., 09:00 for 9 AM UTC, 14:00 for 2 PM UTC). They will automatically be converted to each student's local timezone.
                         </li>
                         <li>
                           Each time slot has a fixed duration of{" "}

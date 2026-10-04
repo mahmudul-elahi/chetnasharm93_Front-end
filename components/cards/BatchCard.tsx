@@ -12,12 +12,19 @@ import {
 import Link from "next/link";
 import { Batch } from "@/types/batches";
 import WeeklySchedule from "@/components/ui/WeeklySchedule";
+import { getLocalTimezone } from "@/src/utils/timezone";
 
 interface BatchCardProps {
   batch: Batch;
 }
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
+  const [localTz, setLocalTz] = React.useState<string>("");
+
+  React.useEffect(() => {
+    setLocalTz(getLocalTimezone());
+  }, []);
+
   const availableSeats = batch.total_seat - batch.filled_seat;
   const bookedPercentage = (batch.filled_seat / batch.total_seat) * 100;
 
@@ -126,16 +133,13 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         {/* Weekly Schedule Section */}
         <WeeklySchedule
           schedules={batch.schedules}
-          teacherTimezone={batch.teacher?.timezone}
         />
 
         {/* Timezone Notice */}
-        {batch.teacher?.timezone && (
-          <div className="flex items-center gap-2 text-xs text-gray-500 bg-primary/5 border border-primary/10 rounded-lg px-3 py-2">
-            <Globe className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-            <span>Time shown in your local timezone</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2 text-xs text-gray-500 bg-primary/5 border border-primary/10 rounded-lg px-3 py-2">
+          <Globe className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+          <span>Time shown in your local timezone{localTz ? ` (${localTz})` : ""}</span>
+        </div>
 
         {/* Bottom Information Row */}
         <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">

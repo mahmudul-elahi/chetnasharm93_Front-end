@@ -29,6 +29,7 @@ import Link from "next/link";
 import Loader from "@/components/ui/Loader";
 import ActionButton from "@/components/ui/ActionButton";
 import UpdateZoomLinkModal from "./components/UpdateZoomLinkModal";
+import { convertUtcScheduleToLocal } from "@/src/utils/timezone";
 import { ApiResponse, Schedule } from "@/types/batchesForTeacher";
 
 const BatchDetailsPageForTeacher = () => {
@@ -195,30 +196,36 @@ const BatchDetailsPageForTeacher = () => {
                 </h2>
               </div>
               <div className="space-y-3">
-                {schedules?.map((schedule: Schedule) => (
-                  <div
-                    key={schedule.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                        <span className="text-purple-600 font-semibold">
-                          {getDayName(schedule.day_of_week).charAt(0)}
-                        </span>
+                {schedules?.map((schedule: Schedule) => {
+                  const local = convertUtcScheduleToLocal(
+                    schedule.day_of_week,
+                    schedule.start_time,
+                    schedule.end_time
+                  );
+                  return (
+                    <div
+                      key={schedule.id}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                          <span className="text-purple-600 font-semibold">
+                            {local.day.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {local.day}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {local.timeString}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-800">
-                          {getDayName(schedule.day_of_week)}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {schedule.start_time.slice(0, 5)} -{" "}
-                          {schedule.end_time.slice(0, 5)}
-                        </p>
-                      </div>
+                      <Clock className="w-4 h-4 text-gray-400" />
                     </div>
-                    <Clock className="w-4 h-4 text-gray-400" />
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -314,27 +321,33 @@ const BatchDetailsPageForTeacher = () => {
               </div>
 
               {/* Next Class Info */}
-              {schedules && schedules.length > 0 && (
-                <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
-                  <h3 className="font-semibold text-gray-800 mb-3">
-                    Next Class
-                  </h3>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800">
-                        {getDayName(schedules[0].day_of_week)}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {schedules[0].start_time.slice(0, 5)} -{" "}
-                        {schedules[0].end_time.slice(0, 5)}
-                      </p>
+              {schedules && schedules.length > 0 && (() => {
+                const firstLocal = convertUtcScheduleToLocal(
+                  schedules[0].day_of_week,
+                  schedules[0].start_time,
+                  schedules[0].end_time
+                );
+                return (
+                  <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                    <h3 className="font-semibold text-gray-800 mb-3">
+                      Next Class
+                    </h3>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {firstLocal.day}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {firstLocal.timeString}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* Actions Card */}
               <div className="bg-linear-to-r from-orange-50 to-yellow-50 rounded-2xl p-6 border border-orange-100">

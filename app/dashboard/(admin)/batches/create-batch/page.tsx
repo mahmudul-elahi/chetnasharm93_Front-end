@@ -84,30 +84,36 @@ const CreateBatch = () => {
     const dayStr = day.toString();
     const timeOnly = startTime.slice(0, 5);
 
-    const existingIndex = selectedSchedules.findIndex(
+    const existingSlotIndex = selectedSchedules.findIndex(
       (s) => s.day_of_week === dayStr && s.start_time === timeOnly,
     );
 
-    if (existingIndex !== -1) {
+    if (existingSlotIndex !== -1) {
+      // Clicking the already selected slot deselects it
       setSelectedSchedules((prev) =>
-        prev.filter((_, i) => i !== existingIndex),
+        prev.filter((_, i) => i !== existingSlotIndex),
       );
       toast.success(
         `Removed schedule for ${weekdayLabels[day]} at ${timeOnly}`,
       );
     } else {
-      if (selectedSchedules.some((s) => s.day_of_week === dayStr)) {
-        toast.error(
-          `You already selected a schedule for ${weekdayLabels[day]}`,
-        );
-        return;
-      }
+      // If another slot was already selected for this day, replace it with the new slot
+      const hadPreviousForDay = selectedSchedules.some(
+        (s) => s.day_of_week === dayStr,
+      );
 
       setSelectedSchedules((prev) => [
-        ...prev,
+        ...prev.filter((s) => s.day_of_week !== dayStr),
         { day_of_week: dayStr, start_time: timeOnly },
       ]);
-      toast.success(`Added ${weekdayLabels[day]} at ${timeOnly} to schedule`);
+
+      if (hadPreviousForDay) {
+        toast.success(
+          `Updated schedule for ${weekdayLabels[day]} to ${timeOnly}`,
+        );
+      } else {
+        toast.success(`Added ${weekdayLabels[day]} at ${timeOnly} to schedule`);
+      }
     }
   };
 
@@ -215,6 +221,9 @@ const CreateBatch = () => {
             startDate={formState.startDate!}
             endDate={formState.endDate!}
             onToggleSchedule={handleToggleSchedule}
+            teacherTimezone={formState.selectedTeacher?.timezone}
+            teacherCountry={formState.selectedTeacher?.country}
+            teacherName={formState.selectedTeacher?.name}
           />
         )}
 

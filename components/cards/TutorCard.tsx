@@ -29,7 +29,7 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
 
   return (
     <>
-      <div className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700 relative">
+      <div className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700 relative flex flex-col h-full">
         {/* Top Tutor Badge - positioned at top-right of card */}
         {isTopTutor && (
           <div className="absolute top-0 right-0 z-10">
@@ -46,7 +46,8 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
             </div>
           </div>
         )}
-        <div>
+
+        <div className="flex-1 flex flex-col">
           {/* Top Section: Image with verified badge + Name & Expertise */}
           <div className="p-5">
             <div className="flex items-start gap-4">
@@ -94,13 +95,6 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate">
                     {tutor.name}
                   </h3>
-                  {/* Optional small badge next to name (alternative placement) */}
-                  {/* {isTopTutor && (
-                  <span className="inline-flex items-center gap-0.5 text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full text-[10px] font-semibold">
-                    <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                    Top
-                  </span>
-                )} */}
                 </div>
                 <p className="text-sm text-purple-600 dark:text-purple-400 font-medium mt-1">
                   {tutor.expertise} Specialist
@@ -113,17 +107,11 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
           <div className="border-t border-gray-100 dark:border-gray-700 mx-5"></div>
 
           {/* Center Section: Bio, Expertise, Qualification */}
-          <div className="p-5 space-y-3">
-            {/* Bio - 2 lines only */}
-            {tutor.bio ? (
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
-                {tutor.bio}
-              </p>
-            ) : (
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
-                No Bio Available
-              </p>
-            )}
+          <div className="p-5 space-y-3 flex-1 flex flex-col">
+            {/* Bio - 2 lines only with consistent min-height */}
+            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2 min-h-[2.6rem]">
+              {tutor.bio || "No Bio Available"}
+            </p>
 
             {/* Expertise */}
             <div className="flex items-start gap-2.5">
@@ -150,6 +138,7 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
                 </p>
               </div>
             </div>
+
             {/* Experience */}
             <div className="flex items-start gap-2.5">
               <Briefcase className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
@@ -164,11 +153,12 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
             </div>
           </div>
         </div>
+
         {/* Divider */}
         <div className="border-t border-gray-100 dark:border-gray-700 mx-5"></div>
 
-        {/* Bottom Section: View Details Button */}
-        <div className="p-5">
+        {/* Bottom Section: View Details Button pinned to bottom */}
+        <div className="p-5 mt-auto">
           <Link href={`/tutors/${tutor.id}`} className="block w-full">
             <MyButton className="w-full" variant="outline">
               <Eye className="w-4 h-4" />

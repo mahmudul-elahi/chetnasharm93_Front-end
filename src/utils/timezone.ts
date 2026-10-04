@@ -1,62 +1,97 @@
 import { DateTime } from "luxon";
 
 /**
- * Get the student's local timezone
+ * Get the viewer's local timezone dynamically from browser.
  */
-export const getStudentTimezone = (): string => {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+export const getLocalTimezone = (): string => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
 };
 
-/**
- * Convert a schedule from teacher's timezone to student's local timezone
- * @param teacherTimezone - The teacher's timezone (e.g., "Asia/Kolkata")
- * @param dayOfWeek - Day of week (0-6, where 0 is Sunday)
- * @param startTime - Start time in HH:mm:ss format (e.g., "09:00:00")
- * @param endTime - End time in HH:mm:ss format (e.g., "09:30:00")
- * @returns Object with converted day, startTime, and endTime
- */
-export const convertScheduleToLocal = (
-  teacherTimezone: string,
-  dayOfWeek: number,
-  startTime: string,
-  endTime: string
-): { day: string; startTime: string; endTime: string; timeString: string } => {
-  const studentTimezone = getStudentTimezone();
+export const getStudentTimezone = getLocalTimezone;
 
-  // Get current date in teacher's timezone to establish the week
-  const nowInTeacherTz = DateTime.now().setZone(teacherTimezone);
-  
-  // Find the Sunday of the current week in teacher's timezone
-  const currentDayOfWeek = nowInTeacherTz.weekday % 7; // 0 = Sunday in our system
-  const daysUntilSunday = currentDayOfWeek;
-  const sundayInTeacherTz = nowInTeacherTz.minus({ days: daysUntilSunday });
-  
-  // Calculate the target date in teacher's timezone
-  const targetDateInTeacherTz = sundayInTeacherTz.plus({ days: dayOfWeek });
-  
-  // Parse start and end times
-  const [startHours, startMinutes, startSeconds] = startTime.split(":").map(Number);
-  const [endHours, endMinutes, endSeconds] = endTime.split(":").map(Number);
-  
-  // Create DateTime objects for start and end times in teacher's timezone
-  const startDateTimeInTeacherTz = targetDateInTeacherTz.set({
-    hour: startHours,
-    minute: startMinutes,
-    second: startSeconds || 0,
-  });
-  
-  const endDateTimeInTeacherTz = targetDateInTeacherTz.set({
-    hour: endHours,
-    minute: endMinutes,
-    second: endSeconds || 0,
-  });
-  
-  // Convert to student's timezone
-  const startDateTimeInStudentTz = startDateTimeInTeacherTz.setZone(studentTimezone);
-  const endDateTimeInStudentTz = endDateTimeInTeacherTz.setZone(studentTimezone);
-  
-  // Get day names
-  const days = [
+/**
+ * Convert a UTC weekly schedule (day 0-6, HH:mm:ss) into the user's local timezone.
+ *
+ * @param utcDayOfWeek - 0 (Sunday) to 6 (Saturday) in UTC
+ * @param utcStartTime - "HH:mm" or "HH:mm:ss" in UTC
+ * @param utcEndTime - "HH:mm" or "HH:mm:ss" in UTC (optional)
+ * @param targetTimezone - Target IANA timezone string (optional, defaults to local browser timezone)
+ */
+export const convertUtcScheduleToLocal = (
+  utcDayOfWeek: number,
+  utcStartTime: string,
+  utcEndTime?: string,
+  targetTimezone?: string,
+): {
+  day: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  timeString: string;
+} => {
+  const localTz = targetTimezone || getLocalTimezone();
+  const [startH, startM, startS = 0] = (utcStartTime || "00:00").split(":").map(Number);
+
+  // 2026-01-04 is a Sunday in UTC
+  const safeDay = ((utcDayOfWeek % 7) + 7) % 7;
+  const startDate = new Date(Date.UTC(2026, 0, 4 + safeDay, startH, startM, startS));
+
+  const getParts = (date: Date) => {
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+        timeZone: localTz,
+      }).formatToParts(date);
+      const map: Record<string, string> = {};
+      for (const p of parts) map[p.type] = p.value;
+      return map;
+    } catch {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+        timeZone: "UTC",
+      }).formatToParts(date);
+      const map: Record<string, string> = {};
+      for (const p of parts) map[p.type] = p.value;
+      return map;
+    }
+  };
+
+  const startParts = getParts(startDate);
+  const startHourStr = startParts.hour || "12";
+  const startMinuteStr = (startParts.minute || "00").padStart(2, "0");
+  const startPeriod = startParts.dayPeriod || (parseInt(startHourStr) >= 12 ? "PM" : "AM");
+  const startTime = `${startHourStr}:${startMinuteStr} ${startPeriod}`;
+
+  let endTime = "";
+  let timeString = startTime;
+
+  if (utcEndTime) {
+    const [endH, endM, endS = 0] = utcEndTime.split(":").map(Number);
+    const endDate = new Date(Date.UTC(2026, 0, 4 + safeDay, endH, endM, endS));
+    const endParts = getParts(endDate);
+    const endHourStr = endParts.hour || "12";
+    const endMinuteStr = (endParts.minute || "00").padStart(2, "0");
+    const endPeriod = endParts.dayPeriod || (parseInt(endHourStr) >= 12 ? "PM" : "AM");
+    endTime = `${endHourStr}:${endMinuteStr} ${endPeriod}`;
+
+    if (startPeriod === endPeriod) {
+      timeString = `${startHourStr}:${startMinuteStr} - ${endHourStr}:${endMinuteStr} ${startPeriod}`;
+    } else {
+      timeString = `${startHourStr}:${startMinuteStr} ${startPeriod} - ${endHourStr}:${endMinuteStr} ${endPeriod}`;
+    }
+  }
+
+  const DAYS = [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -65,64 +100,100 @@ export const convertScheduleToLocal = (
     "Friday",
     "Saturday",
   ];
-  
-  // Format times in 12-hour format with AM/PM
-  const formatTime12Hour = (dateTime: DateTime): string => {
-    const hour = dateTime.hour;
-    const minute = dateTime.minute;
-    const ampm = hour >= 12 ? "PM" : "AM";
-    const hour12 = hour % 12 || 12;
-    return `${hour12}:${minute.toString().padStart(2, "0")} ${ampm}`;
-  };
+  const localDayName = startParts.weekday || "Sunday";
+  const localDayIndex =
+    DAYS.indexOf(localDayName) >= 0 ? DAYS.indexOf(localDayName) : safeDay;
 
-  // formatTime12Hour already includes AM/PM, so just join with a dash
-  const timeString = `${formatTime12Hour(startDateTimeInStudentTz)} - ${formatTime12Hour(endDateTimeInStudentTz)}`;
-  
   return {
-    day: days[startDateTimeInStudentTz.weekday % 7],
-    startTime: formatTime12Hour(startDateTimeInStudentTz),
-    endTime: formatTime12Hour(endDateTimeInStudentTz),
-    timeString: timeString,
+    day: localDayName,
+    dayOfWeek: localDayIndex,
+    startTime,
+    endTime,
+    timeString,
   };
 };
 
 /**
- * Format a schedule for display in the student's local timezone
- * @param teacherTimezone - The teacher's timezone
- * @param dayOfWeek - Day of week (0-6, where 0 is Sunday)
- * @param startTime - Start time in HH:mm:ss format
- * @param endTime - End time in HH:mm:ss format
- * @returns Formatted string like "Saturday 11:30 PM - 12:00 AM"
+ * Convert user's local weekly schedule (day 0-6, HH:mm) into UTC for backend saving.
+ */
+export const convertLocalScheduleToUtc = (
+  localDayOfWeek: number,
+  localTime: string,
+  sourceTimezone?: string,
+): {
+  day_of_week: number;
+  time: string;
+  timeWithSeconds: string;
+} => {
+  const localTz = sourceTimezone || getLocalTimezone();
+  const [h, m, s = 0] = (localTime || "00:00").split(":").map(Number);
+
+  try {
+    const localDt = DateTime.fromObject(
+      { year: 2026, month: 1, day: 4 + (((localDayOfWeek % 7) + 7) % 7), hour: h, minute: m, second: s },
+      { zone: localTz },
+    );
+    const utcDt = localDt.toUTC();
+    return {
+      day_of_week: utcDt.weekday % 7,
+      time: utcDt.toFormat("HH:mm"),
+      timeWithSeconds: utcDt.toFormat("HH:mm:ss"),
+    };
+  } catch {
+    return {
+      day_of_week: localDayOfWeek,
+      time: `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`,
+      timeWithSeconds: `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:00`,
+    };
+  }
+};
+
+/**
+ * Backward compatible helper for formatting a schedule to local time.
  */
 export const formatLocalSchedule = (
-  teacherTimezone: string,
-  dayOfWeek: number,
-  startTime: string,
-  endTime: string
+  _teacherTimezoneOrDay: any,
+  dayOfWeek?: any,
+  startTime?: any,
+  endTime?: any,
 ): string => {
-  const converted = convertScheduleToLocal(
-    teacherTimezone,
-    dayOfWeek,
-    startTime,
-    endTime
-  );
-  
-  return converted.timeString;
+  if (typeof dayOfWeek === "number" && startTime) {
+    const res = convertUtcScheduleToLocal(dayOfWeek, startTime, endTime);
+    return `${res.day} ${res.timeString}`;
+  }
+  if (typeof _teacherTimezoneOrDay === "number" && dayOfWeek) {
+    const res = convertUtcScheduleToLocal(_teacherTimezoneOrDay, dayOfWeek, startTime);
+    return `${res.day} ${res.timeString}`;
+  }
+  return "";
 };
 
 /**
- * Get day and time range for a schedule in student's local timezone
- * @param teacherTimezone - The teacher's timezone
- * @param dayOfWeek - Day of week (0-6, where 0 is Sunday)
- * @param startTime - Start time in HH:mm:ss format
- * @param endTime - End time in HH:mm:ss format
- * @returns Object with day, startTime, and endTime separately
+ * Backward compatible helper for getting schedule parts in local time.
  */
 export const getLocalScheduleParts = (
-  teacherTimezone: string,
+  _teacherTimezoneOrDay: any,
+  dayOfWeek?: any,
+  startTime?: any,
+  endTime?: any,
+): { day: string; startTime: string; endTime: string } => {
+  if (typeof dayOfWeek === "number" && startTime) {
+    return convertUtcScheduleToLocal(dayOfWeek, startTime, endTime);
+  }
+  if (typeof _teacherTimezoneOrDay === "number" && dayOfWeek) {
+    return convertUtcScheduleToLocal(_teacherTimezoneOrDay, dayOfWeek, startTime);
+  }
+  return { day: "Sunday", startTime: "", endTime: "" };
+};
+
+/**
+ * Backward compatible helper for converting a schedule.
+ */
+export const convertScheduleToLocal = (
+  _teacherTimezone: string,
   dayOfWeek: number,
   startTime: string,
-  endTime: string
-): { day: string; startTime: string; endTime: string } => {
-  return convertScheduleToLocal(teacherTimezone, dayOfWeek, startTime, endTime);
+  endTime: string,
+) => {
+  return convertUtcScheduleToLocal(dayOfWeek, startTime, endTime);
 };
