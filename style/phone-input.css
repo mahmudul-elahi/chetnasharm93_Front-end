@@ -1,0 +1,110 @@
+/* styles/phone-input.css */
+
+/* PhoneInput Dropdown Styles */
+.react-tel-input .country-list {
+  border-radius: 0.75rem !important;
+  overflow-y: auto !important;
+  max-height: 200px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.react-tel-input .country-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.react-tel-input .country-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+
+.react-tel-input .country-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.react-tel-input .country-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+.dark .react-tel-input .country-list::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark .react-tel-input .country-list::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark .react-tel-input .country-list::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Search box styles */
+.react-tel-input .search-box {
+  border-radius: 0.75rem !important;
+  margin: 8px !important;
+  width: calc(100% - 16px) !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+}
+
+.dark .react-tel-input .search-box {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+  color: white !important;
+}
+
+.react-tel-input .search-box:focus {
+  outline: none !important;
+  border-color: #3b82f6 !important;
+  ring: 2px solid #3b82f6 !important;
+}
+
+/* Country items hover effect */
+.react-tel-input .country-list .country:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.dark .react-tel-input .country-list .country:hover {
+  background-color: #374151 !important;
+}
+
+/* First and last item border radius */
+.react-tel-input .country-list .country:first-child {
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.react-tel-input .country-list .country:last-child {
+  border-radius: 0 0 0.75rem 0.75rem !important;
+}
+
+/* Flag dropdown button */
+.react-tel-input .flag-dropdown {
+  border-radius: 0.75rem 0 0 0.75rem !important;
+}
+
+.react-tel-input .selected-flag {
+  border-radius: 0.75rem 0 0 0.75rem !important;
+}
+
+/* Ensure proper z-index for dropdown */
+.react-tel-input .country-list {
+  z-index: 9999 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .react-tel-input .country-list {
+    max-height: 160px !important;
+  }
+  
+  .react-tel-input .search-box {
+    font-size: 13px !important;
+  }
+}
+
+.search{
+    display: flex !important;
+    align-items: center !important;
+}
