@@ -250,7 +250,7 @@ export default function TeacherDetailsContent({ id }: { id?: string }) {
   }
 
   return (
-    <div className="space-y-6 max-w-350 mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-16 xl:pt-20 pb-12">
+    <div className="space-y-6 max-w-350 mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 lg:pt-24 pb-12">
       {/* Back Button */}
       <button
         onClick={() => router.back()}

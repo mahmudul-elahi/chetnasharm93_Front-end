@@ -150,7 +150,7 @@ const VocabularyPage = () => {
   }
 
   return (
-    <div className="pt-10 min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="pt-16 sm:pt-20 min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-350 mx-auto px-4 md:px-6 lg:px-8 py-12" id="vocabulary-top">
         {/* Header Section */}
         <div className="text-center mb-12">

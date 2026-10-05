@@ -115,7 +115,7 @@ const SpeakingTopicsPage = () => {
   }
 
   return (
-    <div className="pt-10 min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="pt-16 sm:pt-20 min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8 py-10" id="speaking-topics-top">
         {/* Hero Section */}
         <div className="text-center mb-8">

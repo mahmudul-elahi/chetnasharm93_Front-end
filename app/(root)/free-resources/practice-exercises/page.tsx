@@ -124,7 +124,7 @@ const BasicQuestionsPage = () => {
   }
 
   return (
-    <div className="pt-10 min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="pt-16 sm:pt-20 min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8 py-10" id="basic-questions-top">
         {/* Hero Section */}
         <div className="text-center mb-8">

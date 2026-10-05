@@ -4,7 +4,7 @@ import React from "react";
 
 const BatchDetailSkeleton = () => {
   return (
-    <div className="min-h-screen pt-25 bg-linear-to-br from-gray-50 to-gray-100 py-8">
+    <div className="min-h-screen pt-24 pb-12 sm:pt-28 sm:pb-16 bg-linear-to-br from-gray-50 to-gray-100">
       <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Side - Batch Details Skeleton */}

@@ -129,7 +129,7 @@ const Pagination: React.FC<PaginationProps> = ({
           size="sm"
           onClick={() => handlePageChange(1)}
           disabled={currentPage === 1}
-          className="h-9 w-9 p-0"
+          className="hidden sm:inline-flex h-9 w-9 p-0"
           aria-label="First page"
         >
           <ChevronsLeft className="w-4 h-4" />
@@ -178,7 +178,7 @@ const Pagination: React.FC<PaginationProps> = ({
           size="sm"
           onClick={() => handlePageChange(totalPages)}
           disabled={currentPage === totalPages}
-          className="h-9 w-9 p-0"
+          className="hidden sm:inline-flex h-9 w-9 p-0"
           aria-label="Last page"
         >
           <ChevronsRight className="w-4 h-4" />

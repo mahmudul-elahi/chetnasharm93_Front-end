@@ -77,7 +77,7 @@ const ContactPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white font-sans mt-10">
+    <div className="min-h-screen bg-white font-sans pt-14 sm:pt-16">
       {/* Main Container */}
       <div className="max-w-350 mx-auto px-4 sm:px-6 py-16 sm:py-24 md:py-32">
         {/* Hero Section */}

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Settings, LogOut } from "lucide-react";
+import { Settings, LogOut, LayoutDashboard } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetMeQuery } from "@/src/redux/api/auth/authApi";
@@ -126,12 +126,22 @@ export const ProfileIcon = ({
           <div className="py-1">
             <button
               onClick={() => {
+                router.push("/dashboard");
+                setIsOpen(false);
+              }}
+              className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <LayoutDashboard className="w-4 h-4 text-gray-500" />
+              Dashboard
+            </button>
+            <button
+              onClick={() => {
                 router.push(`/dashboard/settings`);
                 setIsOpen(false);
               }}
               className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors cursor-pointer"
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-4 h-4 text-gray-500" />
               Profile Settings
             </button>
             <button
