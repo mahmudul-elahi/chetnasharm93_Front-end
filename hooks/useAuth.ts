@@ -31,6 +31,8 @@ export const useAuth = () => {
       dispatch(logout());
       localStorage.removeItem("authToken");
       localStorage.removeItem("user");
+      sessionStorage.removeItem("authToken");
+      sessionStorage.removeItem("user");
       document.cookie =
         "authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       document.cookie =
@@ -154,8 +156,8 @@ export const useAuth = () => {
     login,
     logout: handleLogout,
     refreshUser: refetch,
-    isAdmin: user?.role === "admin",
-    isTeacher: user?.role === "teacher",
-    isStudent: user?.role === "student",
+    isAdmin: user?.role?.toLowerCase() === "admin",
+    isTeacher: user?.role?.toLowerCase() === "teacher",
+    isStudent: user?.role?.toLowerCase() === "student" || (!user?.role && !!user),
   };
 };

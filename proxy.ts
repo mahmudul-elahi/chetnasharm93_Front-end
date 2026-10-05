@@ -47,25 +47,38 @@ const getRequiredRoles = (pathname: string): Role[] | null => {
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
+  // If user is already authenticated and visits login or register, redirect to dashboard
+  if (pathname === "/login" || pathname === "/register") {
+    const token = request.cookies.get("authToken")?.value;
+    if (token && token !== "undefined" && token !== "null") {
+      const redirectParam = request.nextUrl.searchParams.get("redirect");
+      const dest =
+        redirectParam && !redirectParam.startsWith("/login") && !redirectParam.startsWith("/register")
+          ? redirectParam
+          : "/dashboard";
+      return NextResponse.redirect(new URL(dest, request.url));
+    }
+  }
+
   // All dashboard routes require authentication
   if (pathname.startsWith("/dashboard")) {
     const token = request.cookies.get("authToken")?.value;
 
-    if (!token) {
+    if (!token || token === "undefined" || token === "null") {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname + search);
       return NextResponse.redirect(loginUrl);
     }
 
     const rawRole = request.cookies.get("userRole")?.value;
-    const userRole = rawRole?.toLowerCase() as Role | undefined;
+    const userRole = (rawRole?.toLowerCase() as Role | undefined) || "student";
     const requiredRoles = getRequiredRoles(pathname) || [
       "admin",
       "teacher",
       "student",
     ];
 
-    if (!userRole || !requiredRoles.includes(userRole)) {
+    if (!requiredRoles.includes(userRole)) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
   }

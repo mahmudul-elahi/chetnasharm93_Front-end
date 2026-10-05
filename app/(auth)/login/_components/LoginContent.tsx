@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -87,6 +87,25 @@ export default function LoginContent() {
     mode: "onChange",
   });
 
+  // If already authenticated, redirect to destination immediately
+  useEffect(() => {
+    const hasToken =
+      (typeof document !== "undefined" && document.cookie.includes("authToken=")) ||
+      (typeof window !== "undefined" &&
+        (localStorage.getItem("authToken") || sessionStorage.getItem("authToken")));
+
+    if (hasToken) {
+      const redirectParam = searchParams.get("redirect");
+      const dest =
+        redirectParam &&
+        !redirectParam.startsWith("/login") &&
+        !redirectParam.startsWith("/register")
+          ? redirectParam
+          : "/dashboard";
+      window.location.replace(dest);
+    }
+  }, [searchParams]);
+
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
     localStorage.setItem("rememberMe", String(data.rememberMe));
@@ -97,68 +116,58 @@ export default function LoginContent() {
         password: data.password,
       }).unwrap();
 
-      const { user, token } = result;
+      const user = result?.user || result?.data?.user;
+      const token =
+        result?.token ||
+        result?.data?.token ||
+        result?.access_token ||
+        result?.data?.access_token;
+
+      if (!token) {
+        throw new Error(
+          result?.message || "Login failed: No authentication token received."
+        );
+      }
 
       // Set loading state for the button
       setIsRedirecting(true);
 
-      // Create promises for storage operations
-      const storageOperations = async () => {
-        const cookieAge = data.rememberMe
-          ? 30 * 24 * 60 * 60
-          : 24 * 60 * 60;
-        document.cookie = `authToken=${token}; path=/; max-age=${cookieAge}; SameSite=Lax`;
-        if (user?.role) {
-          document.cookie = `userRole=${user.role}; path=/; max-age=${cookieAge}; SameSite=Lax`;
-        }
+      const cookieAge = data.rememberMe
+        ? 30 * 24 * 60 * 60
+        : 24 * 60 * 60;
+      const userRole = user?.role ? String(user.role).toLowerCase() : "student";
 
-        if (data.rememberMe) {
-          localStorage.setItem("authToken", token);
-          localStorage.setItem("user", JSON.stringify(user));
+      document.cookie = `authToken=${token}; path=/; max-age=${cookieAge}; SameSite=Lax`;
+      document.cookie = `userRole=${userRole}; path=/; max-age=${cookieAge}; SameSite=Lax`;
 
-          // Verify localStorage was set correctly
-          const storedToken = localStorage.getItem("authToken");
-          const storedUser = localStorage.getItem("user");
+      // Persist across localStorage and sessionStorage so Redux and hooks hydrate reliably
+      localStorage.setItem("authToken", token);
+      sessionStorage.setItem("authToken", token);
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("user", JSON.stringify(user));
+      }
 
-          if (!storedToken || !storedUser) {
-            throw new Error("Failed to save to localStorage");
-          }
-        } else {
-          sessionStorage.setItem("authToken", token);
-          sessionStorage.setItem("user", JSON.stringify(user));
-
-          // Verify sessionStorage was set correctly
-          const storedToken = sessionStorage.getItem("authToken");
-          const storedUser = sessionStorage.getItem("user");
-
-          if (!storedToken || !storedUser) {
-            throw new Error("Failed to save to sessionStorage");
-          }
-        }
-      };
-
-      // Create promise for Redux dispatch
-      const reduxOperation = () => {
-        return new Promise((resolve) => {
-          dispatch(setCredentials({ user, token }));
-          // Give Redux a moment to update its state
-          setTimeout(resolve, 0);
-        });
-      };
-
-      // Wait for both storage and Redux operations to complete
-      await Promise.all([storageOperations(), reduxOperation()]);
+      dispatch(setCredentials({ user: user || null, token }));
 
       toast.success("Sign in successfully!");
 
-      const redirectUrl = searchParams.get("redirect") || "/dashboard";
+      const redirectParam = searchParams.get("redirect");
+      const redirectUrl =
+        redirectParam &&
+        !redirectParam.startsWith("/login") &&
+        !redirectParam.startsWith("/register")
+          ? redirectParam
+          : "/dashboard";
 
-      // Refresh and redirect after everything is confirmed
-      router.refresh();
-      router.replace(redirectUrl);
+      // Full document navigation ensures all cookies are committed and sent in headers to proxy.ts
+      window.location.href = redirectUrl;
     } catch (err: any) {
       const msg =
-        err?.data?.message || err?.data?.error || "Invalid email or password";
+        err?.data?.message ||
+        err?.data?.error ||
+        err?.message ||
+        "Invalid email or password";
 
       setServerError(msg);
       toast.error(msg);

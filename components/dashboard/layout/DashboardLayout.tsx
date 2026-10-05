@@ -9,10 +9,7 @@ import { useState, useEffect } from "react";
 
 const DashboardLayoutClient = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const [open, setOpen] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return window.innerWidth >= 1024;
-  });
+  const [open, setOpen] = useState<boolean>(false);
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
@@ -25,6 +22,17 @@ const DashboardLayoutClient = ({ children }: { children: React.ReactNode }) => {
   // Redirect to login when auth resolves to no user
   useEffect(() => {
     if (!isLoading && !user) {
+      const hasCookieToken =
+        typeof document !== "undefined" && document.cookie.includes("authToken=");
+      const hasStorageToken =
+        typeof window !== "undefined" &&
+        (localStorage.getItem("authToken") || sessionStorage.getItem("authToken"));
+
+      if (hasCookieToken || hasStorageToken) {
+        // Token exists, waiting for user data to hydrate or load
+        return;
+      }
+
       const currentPath = window.location.pathname;
       router.replace(`/login?redirect=${encodeURIComponent(currentPath)}`);
     }

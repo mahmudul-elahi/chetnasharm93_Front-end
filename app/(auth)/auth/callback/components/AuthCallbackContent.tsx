@@ -95,22 +95,23 @@ export default function AuthCallbackContent() {
         }),
       );
 
+      // Persist user to localStorage and sessionStorage
+      localStorage.setItem("user", JSON.stringify(userData.user));
+      sessionStorage.setItem("user", JSON.stringify(userData.user));
+
       // Set user role cookie
       const maxAge = 30 * 24 * 60 * 60;
-      document.cookie = `userRole=${userData.user.role}; path=/; max-age=${maxAge}; SameSite=Lax`;
+      const userRole = userData.user.role ? String(userData.user.role).toLowerCase() : "student";
+      document.cookie = `userRole=${userRole}; path=/; max-age=${maxAge}; SameSite=Lax`;
 
       toast.success("Successfully Signed in with Google!");
 
       // Use the stored redirect URL (from sessionStorage) or default to /dashboard
       const finalRedirectUrl = redirectUrl || "/dashboard";
 
-      // Use the same redirect pattern as email login
-      router.refresh();
-      setTimeout(() => {
-        router.replace(finalRedirectUrl);
-      }, 500);
+      window.location.href = finalRedirectUrl;
     }
-  }, [userData, token, dispatch, router, redirectUrl]);
+  }, [userData, token, dispatch, redirectUrl]);
 
   // Handle error
   useEffect(() => {

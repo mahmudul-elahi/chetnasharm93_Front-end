@@ -3,15 +3,30 @@ import authReducer from "./slices/authSlice";
 import tabReducer from './slices/tabSlice';
 import { baseApi } from "./api/baseApi";
 
+const getCookie = (name: string): string | null => {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(`(^|;\\s*)${name}=([^;]+)`));
+  return match ? decodeURIComponent(match[2]) : null;
+};
+
 const loadAuthState = () => {
   if (typeof window === "undefined") return undefined;
   try {
-    const token = localStorage.getItem("authToken");
-    const user = localStorage.getItem("user");
-    if (token && user) {
+    const token =
+      localStorage.getItem("authToken") ||
+      sessionStorage.getItem("authToken") ||
+      getCookie("authToken");
+
+    const rawUser =
+      localStorage.getItem("user") ||
+      sessionStorage.getItem("user");
+
+    const user = rawUser ? JSON.parse(rawUser) : null;
+
+    if (token && token !== "undefined" && token !== "null") {
       return {
         auth: {
-          user: JSON.parse(user),
+          user,
           token,
           isAuthenticated: true,
           isLoading: false,
@@ -23,6 +38,8 @@ const loadAuthState = () => {
     console.error("Error loading auth state:", error);
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
+    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem("user");
   }
   return {
     auth: {
@@ -35,7 +52,7 @@ const loadAuthState = () => {
   };
 };
 
-const setCookie = (name: string, value: string, hours = 24) => {
+const setCookie = (name: string, value: string, hours = 24 * 30) => {
   const expires = new Date();
   expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
   document.cookie = `${name}=${value}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`;
@@ -63,17 +80,21 @@ store.subscribe(() => {
 
   if (isAuthenticated && token) {
     localStorage.setItem("authToken", token);
-    setCookie("authToken", token, 24);
+    sessionStorage.setItem("authToken", token);
+    setCookie("authToken", token, 24 * 30);
 
-    //  Only update user-related storage if user exists
-    // (during token refresh, user stays the same so no need to rewrite)
+    // Only update user-related storage if user exists
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
-      setCookie("userRole", user.role, 24);
+      sessionStorage.setItem("user", JSON.stringify(user));
+      const role = user.role ? String(user.role).toLowerCase() : "student";
+      setCookie("userRole", role, 24 * 30);
     }
   } else if (!isAuthenticated) {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
+    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem("user");
     clearCookie("authToken");
     clearCookie("userRole");
   }
