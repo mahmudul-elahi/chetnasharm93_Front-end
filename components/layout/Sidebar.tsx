@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import MyButton from "../ui/MyButton";
@@ -24,7 +24,13 @@ const Sidebar = ({
   user,
   isAuthenticated,
 }: SidebarProps) => {
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const isActive = (href: string) => {
     if (href === "/") return pathname === href;
     return pathname === href || pathname?.startsWith(`${href}/`);
@@ -51,7 +57,9 @@ const Sidebar = ({
     { name: "Contact Us", href: "/contact" },
   ];
 
-  const navItems = user && isAuthenticated
+  const isLoggedIn = mounted && !!user && isAuthenticated;
+
+  const navItems = isLoggedIn
     ? [...baseNavItems, { name: "Dashboard", href: "/dashboard" }]
     : baseNavItems;
 
@@ -123,7 +131,7 @@ const Sidebar = ({
 
           {/* Auth Buttons */}
           <div className="p-5 flex flex-col gap-3">
-            {!user ? (
+            {!isLoggedIn ? (
               <>
                 <Link href="/login" onClick={onClose}>
                   <MyButton className="w-full">Log in</MyButton>

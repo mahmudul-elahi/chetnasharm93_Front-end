@@ -338,19 +338,19 @@ export default function TeacherDetailsContent({ id }: { id?: string }) {
         </div>
 
         {/* Video Section */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 flex flex-col">
           {teacher.intro_video_url ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 h-full flex flex-col">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Introduction Video
               </h2>
 
               <div
                 ref={containerRef}
-                className="relative rounded-2xl overflow-hidden group"
+                className="relative rounded-2xl overflow-hidden group flex-1 w-full bg-black flex items-center justify-center min-h-[300px]"
               >
                 <div
-                  className="relative w-full aspect-video bg-black"
+                  className="relative w-full h-full flex items-center justify-center"
                   onMouseMove={!isMobile ? handleMouseMove : undefined}
                   onMouseLeave={!isMobile ? handleMouseLeave : undefined}
                 >
@@ -505,14 +505,17 @@ export default function TeacherDetailsContent({ id }: { id?: string }) {
               </div>
             </div>
           ) : (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 h-full flex flex-col">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Introduction Video
               </h2>
-              <div className="w-full aspect-video bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-xl flex flex-col items-center justify-center">
-                <VideoIcon className="w-12 h-12 text-gray-400 mb-2" />
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+              <div className="w-full flex-1 min-h-[320px] bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-xl flex flex-col items-center justify-center p-8">
+                <VideoIcon className="w-14 h-14 text-gray-400 mb-3" />
+                <p className="text-gray-600 dark:text-gray-300 font-medium text-base">
                   No introduction video available
+                </p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
+                  This tutor hasn't uploaded an intro video yet.
                 </p>
               </div>
             </div>

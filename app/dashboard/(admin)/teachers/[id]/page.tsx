@@ -285,104 +285,121 @@ export default function TeacherDetailsPage() {
         <span>Back to Teachers</span>
       </button>
 
-      {/* Teacher Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-          {/* Avatar */}
-          <div className="relative">
-            {teacher.image_url ? (
-              <img
-                src={teacher.image_url}
-                alt={teacher.name}
-                className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover ring-4 ring-primary/20"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://ui-avatars.com/api/?name=" + teacher.name;
-                }}
-              />
-            ) : (
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-primary/10 flex items-center justify-center ring-4 ring-primary/20">
-                <User className="w-12 h-12 md:w-16 md:h-16 text-primary" />
-              </div>
-            )}
-          </div>
+      {/* Details Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column: Teacher Header Card & Professional Information Card */}
+        <div className="lg:col-span-1 space-y-6">
+          {/* Teacher Header Card */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+            {/* Top Row: Avatar | Name | Email+Phone */}
+            <div className="flex items-center gap-4">
 
-          {/* Info */}
-          <div className="flex-1">
-            <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                {teacher.name}
-              </h1>
-              <span
-                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold w-fit ${
-                  teacher.suspend_status === 0
-                    ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
-                    : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
-                }`}
-              >
-                {teacher.suspend_status === 0 ? "Active" : "Suspended"}
-              </span>
+              {/* Section 1: Avatar */}
+              <div className="shrink-0">
+                {teacher.image_url ? (
+                  <img
+                    src={teacher.image_url}
+                    alt={teacher.name}
+                    className="w-14 h-14 rounded-full object-cover ring-2 ring-primary/20"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "https://ui-avatars.com/api/?name=" + teacher.name;
+                    }}
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center ring-2 ring-primary/20">
+                    <User className="w-7 h-7 text-primary" />
+                  </div>
+                )}
+              </div>
+
+              {/* Divider */}
+              <div className="h-10 w-px bg-gray-200 dark:bg-gray-700 shrink-0" />
+
+              {/* Section 2: Name + Status + Specialty */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h1 className="text-sm font-bold text-gray-900 dark:text-white">
+                    {teacher.name}
+                  </h1>
+                  <span
+                    className={`inline-block shrink-0 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                      teacher.suspend_status === 0
+                        ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                        : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                    }`}
+                  >
+                    {teacher.suspend_status === 0 ? "Active" : "Suspended"}
+                  </span>
+                </div>
+                {teacher.expertise && (
+                  <p className="text-xs font-medium text-purple-600 dark:text-purple-400 mt-0.5">
+                    {teacher.expertise} Specialist
+                  </p>
+                )}
+              </div>
+
+              {/* Divider */}
+              <div className="h-10 w-px bg-gray-200 dark:bg-gray-700 shrink-0" />
+
+              {/* Section 3: Email + Phone */}
+              <div className="shrink-0 flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
+                  <Mail className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                  <span className="text-xs">{teacher.email}</span>
+                </div>
+                {teacher.mobile && (
+                  <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
+                    <Phone className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span className="text-xs">{teacher.mobile}</span>
+                  </div>
+                )}
+              </div>
+
             </div>
 
-            <div className="grid grid-cols-1 gap-3 mt-4">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <Mail className="w-4 h-4" />
-                <span className="text-sm">{teacher.email}</span>
-              </div>
-              {teacher.mobile && (
-                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                  <Phone className="w-4 h-4" />
-                  <span className="text-sm">{teacher.mobile}</span>
-                </div>
+            {/* Bottom Row: Action Buttons */}
+            <div className="flex items-center justify-end gap-2 pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
+              <ActionButton
+                variant="edit"
+                icon={UserRoundPen}
+                onClick={() => setIsUpdateModalOpen(true)}
+                label="Edit Teacher"
+              />
+              {teacher.suspend_status === 0 ? (
+                <ActionButton
+                  variant="delete"
+                  icon={BanIcon}
+                  onClick={() => {
+                    setConfirmationModal({
+                      isOpen: true,
+                      type: "suspend",
+                      userId: teacher.id,
+                      userName: teacher.name,
+                    });
+                  }}
+                  label="Suspend Teacher"
+                />
+              ) : (
+                <ActionButton
+                  variant="success"
+                  icon={CircleCheckBig}
+                  onClick={() => {
+                    setConfirmationModal({
+                      isOpen: true,
+                      type: "activate",
+                      userId: teacher.id,
+                      userName: teacher.name,
+                    });
+                  }}
+                  label="Activate Teacher"
+                />
               )}
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex gap-2">
-            <ActionButton
-              variant="edit"
-              icon={UserRoundPen}
-              onClick={() => setIsUpdateModalOpen(true)}
-              label="Edit Teacher"
-            />
 
-            {teacher.suspend_status === 0 ? (
-              <ActionButton
-                variant="delete"
-                icon={BanIcon}
-                onClick={() => {
-                  setConfirmationModal({
-                    isOpen: true,
-                    type: "suspend",
-                    userId: teacher.id,
-                    userName: teacher.name,
-                  });
-                }}
-                label="Suspend Teacher"
-              />
-            ) : (
-              <ActionButton
-                variant="success"
-                icon={CircleCheckBig}
-                onClick={() => {
-                  setConfirmationModal({
-                    isOpen: true,
-                    type: "activate",
-                    userId: teacher.id,
-                    userName: teacher.name,
-                  });
-                }}
-                label="Activate Teacher"
-              />
-            )}
-          </div>
-        </div>
-      </div>
 
-      {/* Details Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 space-y-6">
           {/* Quick Info */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -428,19 +445,19 @@ export default function TeacherDetailsPage() {
         </div>
 
         {/* Video Section */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 flex flex-col">
           {teacher.intro_video_url ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 h-full flex flex-col">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Introduction Video
               </h2>
 
               <div
                 ref={containerRef}
-                className="relative rounded-2xl overflow-hidden group"
+                className="relative rounded-2xl overflow-hidden group flex-1 w-full bg-black flex items-center justify-center min-h-[360px]"
               >
                 <div
-                  className="relative w-full aspect-video bg-black"
+                  className="relative w-full h-full flex items-center justify-center"
                   onMouseMove={!isMobile ? handleMouseMove : undefined}
                   onMouseLeave={!isMobile ? handleMouseLeave : undefined}
                 >
@@ -595,11 +612,11 @@ export default function TeacherDetailsPage() {
               </div>
             </div>
           ) : (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 h-full flex flex-col">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Introduction Video
               </h2>
-              <div className="w-full aspect-video bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-xl flex flex-col items-center justify-center">
+              <div className="w-full flex-1 min-h-[360px] bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-xl flex flex-col items-center justify-center">
                 <VideoIcon className="w-12 h-12 text-gray-400 mb-2" />
                 <p className="text-gray-500 dark:text-gray-400 text-sm">
                   No introduction video available

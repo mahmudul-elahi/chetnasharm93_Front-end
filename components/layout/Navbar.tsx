@@ -6,7 +6,6 @@ import { Menu } from "lucide-react";
 import MyButton from "../ui/MyButton";
 import { useAuth } from "@/hooks/useAuth";
 import { ProfileIcon } from "../ui/ProfileIcon";
-import { useGetMeQuery } from "@/src/redux/api/auth/authApi";
 import Sidebar from "./Sidebar";
 import { usePathname } from "next/navigation";
 import LoginButton from "../ui/LoginButton";
@@ -15,16 +14,12 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const { isLoading, isAuthenticated, logout } = useAuth();
-  const { data: fetchedUser, isLoading: userLoading } = useGetMeQuery({
-    skip: !isAuthenticated,
-  });
+  const { user, token, isLoading, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const user = fetchedUser?.user;
   const isLoggedIn = mounted && isAuthenticated && !!user;
 
   const baseNavItems = [
@@ -45,19 +40,39 @@ const Navbar = () => {
     return pathname === href || pathname?.startsWith(`${href}/`);
   };
 
-  // Don't render auth section on server, only on client after mount
   const renderAuthSection = () => {
-    if (isLoading || userLoading) {
+    // Before mounting on the client, always render LoginButton so SSR and client hydration match identically.
+    // On mobile, LoginButton is hidden (hidden lg:block), so no circle or artifact appears.
+    if (!mounted) {
       return (
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+          <LoginButton />
         </div>
       );
     }
 
+    // Authenticated user with loaded profile
+    if (user && isAuthenticated) {
+      return (
+        <div className="flex items-center gap-2 shrink-0">
+          <ProfileIcon />
+        </div>
+      );
+    }
+
+    // Only show avatar skeleton if we have a token (logged in) but user profile is still loading
+    if (token && (isLoading || !user)) {
+      return (
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+        </div>
+      );
+    }
+
+    // Unauthenticated user
     return (
       <div className="flex items-center gap-2 shrink-0">
-        {user && isAuthenticated ? <ProfileIcon /> : <LoginButton />}
+        <LoginButton />
       </div>
     );
   };
@@ -106,7 +121,7 @@ const Navbar = () => {
 
       <Sidebar
         user={user}
-        userLoading={userLoading}
+        userLoading={isLoading}
         isAuthenticated={isAuthenticated}
         logout={logout}
         isOpen={sidebarOpen}
